@@ -1,0 +1,163 @@
+ /* alert/info/warning/sucesss css from https://isabelcastillo.com/error-info-messages-css */
+.isa_info, .isa_success, .isa_warning, .isa_error {
+margin: 10px 0px;
+padding:12px;
+ 
+}
+.isa_info {
+    color: #00529B;
+    background-color: #BDE5F8;
+}
+.isa_success {
+    color: #4F8A10;
+    background-color: #DFF2BF;
+}
+.isa_warning {
+    color: #9F6000;
+    background-color: #FEEFB3;
+}
+.isa_error {
+    color: #D8000C;
+    background-color: #FFBABA;
+}
+.isa_info i, .isa_success i, .isa_warning i, .isa_error i {
+    margin:8px 22px;
+    font-size:2em;
+    vertical-align:middle;
+}
+
+/*------------------------------------------------------------------ */
+/*                      from http://tobiasahlin.com/spinkit/         */
+/*------------------------------------------------------------------ */
+.spinner {
+  width: 70px;
+  height: 18px;
+  text-align: center;
+  display:block;
+  visibility: hidden;
+}
+
+.spinner > div {
+  width: 7px;
+  height: 7px;
+  background-color: #333;
+
+  border-radius: 100%;
+  display: inline-block;
+  -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+}
+
+.spinner .bounce1 {
+  -webkit-animation-delay: -0.32s;
+  animation-delay: -0.32s;
+}
+
+.spinner .bounce2 {
+  -webkit-animation-delay: -0.16s;
+  animation-delay: -0.16s;
+}
+
+@-webkit-keyframes sk-bouncedelay {
+  0%, 80%, 100% { -webkit-transform: scale(0) }
+  40% { -webkit-transform: scale(1.0) }
+}
+
+@keyframes sk-bouncedelay {
+  0%, 80%, 100% { 
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  } 40% { 
+    -webkit-transform: scale(1.0);
+    transform: scale(1.0);
+  }
+}
+
+/*------------------------------------------------------------------ */
+/*             from http://caldwell.github.io/renderjson/            */
+/*------------------------------------------------------------------ */
+
+.renderjson a              { text-decoration: none; }
+.renderjson .disclosure    { color: crimson;}
+.renderjson .syntax        { color: grey; }
+/* .renderjson .string        { color: red; }
+.renderjson .number        { color: cyan; }
+.renderjson .boolean       { color: plum; }
+.renderjson .key           { color: lightblue; }
+.renderjson .keyword       { color: lightgoldenrodyellow; }
+.renderjson .object.syntax { color: lightseagreen; }
+.renderjson .array.syntax  { color: lightsalmon; } */
+
+/* renderjson css looks good on black background, but bad on white, so overriding: */
+
+.renderjson .string        { color: #a11; }
+.renderjson .number        { color: #164; }
+.renderjson .boolean       { color: #708; }
+
+/*------------------------------------------------------------------ */
+/*                         MY CSS                                    */
+/*------------------------------------------------------------------ */
+
+.CodeMirror{
+  display: inline-block;
+  border-radius: 3px; 
+  -moz-border-radius: 3px; 
+  -webkit-border-radius: 3px; 
+  border: 1px solid #b2b6bb;
+  height: 550px;
+  box-sizing:border-box;
+}
+.rounded{
+  border-radius: 3px; 
+  -moz-border-radius: 3px; 
+  -webkit-border-radius: 3px; 
+  border: 1px solid #b2b6bb;
+  box-sizing:border-box;
+}
+#leftContainer{
+  display: inline-block;
+}
+#error, .CodeMirror, #stdin, #stdout, #leftContainer{
+  width: 500px;
+}
+#resultContainer{
+  margin-left: 8px;
+  display: inline-block;
+  vertical-align: top; /*https://stackoverflow.com/questions/13548168/why-my-inline-block-divs-are-not-aligned-when-only-one-of-them-has-text*/
+}
+#results{
+  white-space: pre-wrap; /*https://stackoverflow.com/questions/11423300/new-lines-in-text-within-a-div*/
+}
+#error{
+  white-space: pre-wrap;
+  margin-top: 5px !important;
+  margin-left: 0px !important;
+  border-color: #D8000C !important;
+}
+#stdin{
+  margin-top: 4px;
+  font-family: Lucida Console
+}
+#stdout{
+  margin-top: 4px;
+  white-space: pre-wrap;
+}
+
+.breakpoints {width: .8em;}
+.breakpoint { color: #822; }
+.noEval{
+  background-color:beige; 
+}
+.noEvalFirst{
+  border-top:2px dotted red; 
+}
+
+/* .tooltip { not current using fancy tooltips
+    text-decoration:none;
+    position:relative;
+}
+.tooltip span {
+    display:block;
+    position:fixed;
+    overflow:hidden;
+} */

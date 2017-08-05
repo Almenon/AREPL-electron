@@ -1,0 +1,21 @@
+doctype html
+html(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    // The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags
+    script.
+      // electron stuff from quickstart - not sure what it does
+      if (typeof module === 'object') {
+      window.module = module;
+      module = undefined;
+      }
+      if (window.module) module = window.module;
+    include ScriptsAndLinks
+
+  body
+    include main
+  script.
+    // You can also require other files to run in this process
+    require('./renderer.js')

@@ -1,0 +1,14 @@
+block main
+    h4(style='margin:10px') Real-Time REPL
+    div#leftContainer
+        textarea#ide
+        input#stdin.rounded(type='text', value='>> input')
+        #error.isa_error.rounded(style='display: None')
+            i.fa.fa-times-circle
+        #stdout
+    #resultContainer
+        .spinner
+            .bounce1
+            .bounce2
+            .bounce3
+        #results

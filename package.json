@@ -1,0 +1,30 @@
+{
+  "name": "arepl",
+  "version": "1.0.0",
+  "description": "A python scratchpad with real-time code evaluation",
+  "main": "main.js",
+  "scripts": {
+    "start": "concurrently \"electron .\" \"npm run compilePug\"",
+    "compilePug": "pug -w view/index.pug -o ./"
+  },
+  "repository": "https://github.com/Almenon/AREPL",
+  "keywords": [
+    "Electron",
+    "IDE",
+    "python",
+    "real-time",
+    "scratchpad"
+  ],
+  "author": "Almenon",
+  "devDependencies": {
+    "@types/codemirror": "0.0.41",
+    "@types/jquery": "^3.2.6",
+    "concurrently": "^3.5.0",
+    "electron": "^1.6.11",
+    "pug-cli": "^1.0.0-alpha6"
+  },
+  "dependencies": {
+    "jquery": "^3.2.1",
+    "python-shell": "^0.4.0"
+  }
+}

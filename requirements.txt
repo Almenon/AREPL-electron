@@ -1,0 +1,2 @@
+dill==0.2.7.1
+jsonpickle==0.9.4
