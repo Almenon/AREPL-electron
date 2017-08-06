@@ -1,5 +1,6 @@
 var PythonShell = require('python-shell');
-var pyshell = new PythonShell('src/pythonEvaluator.py');
+var workingDirectory = require('path').dirname(require.main.filename);
+var pyshell = new PythonShell(workingDirectory + '\\src\\python\\pythonEvaluator.py');
 var utils = require("./src/utils");
 var evals = require("./src/evaluators");
 var cmUtils = require("./src/cmUtils");
