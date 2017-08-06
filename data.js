@@ -1,37 +1,45 @@
 module.exports.results = {};
 var printResults = [];
+const identifier = "6q3co7";
 
 /**
  * deserializes result and creates a JSON display, as well as handling error messages / stdout
  * @param {string} pythonResults a single line of text, possibly in JSON format 
  */
 insertResult = function(pythonResults){
-	if(pythonResults.slice(0,5) == "ERROR"){
-			errorText = pythonResults.slice(5);
+
+	//if result should have identifier, otherwise it is just a printout from users code
+	if(pythonResults.length > identifier.length && pythonResults.slice(0,6) == identifier){
+
+		pythonResults = pythonResults.replace("6q3co7","");
+		pythonResults = JSON.parse(pythonResults);
+
+		if(pythonResults["ERROR"] != ""){
+			errorText = pythonResults["ERROR"];
 			errorText = formatPythonException(errorText);
 			$("#error").show("fast");
 			$("#error").text("⚠ " + errorText);
-			noError = false;
 			$(".spinner").css("visibility","hidden");
-			return;
-	}
-	else if(pythonResults[0] == "R"){
-		pythonResults = pythonResults.slice(1);
-		results = JSON.parse(pythonResults);
-		//resultText = JSON.stringify(results, null, 2);
-		$("#results").html(renderjson.set_icons('+', '-').set_show_to_level(2)(results))
-		$("#error").hide();
-		printResults = []; //clear so empty for next program run
+		}
+		else{
+			$("#error").hide();
+			$("#error").text("");
+		}
+		
+		if(pythonResults["userVariables"] != "" && pythonResults["userVariables"] != "{}"){
+			results = JSON.parse(pythonResults["userVariables"]);
+			$("#results").html(
+				renderjson.set_icons('+', '-').set_show_to_level(2)(results)
+			)
+			printResults = []; //clear so empty for next program run
+		}
+		$(".spinner").css("visibility","hidden");
 	}
 	else{
-		//users code has a print to stdout, so who knows what we are getting.  May not be JSON.
 		printResults.push(pythonResults);
 		$("#stdout").text(printResults.join('\n'));
 		return;
 	}
-	noError = true;
-	$("#error").text("");
-	$(".spinner").css("visibility","hidden");
 }
 
 pyshell.on('message', function (message) {
@@ -49,9 +57,19 @@ function formatPythonException(err){
 	//replace File "<string>" (pointless)
 	err = err.replace(/File \"<string>\", /g, "");
 
-	//top level stack frame is python exec file so remove it
 	err = err.split('\n');
 
-	err = [err[0]].concat(err.slice(3));
+	// error includes is caught in pythonEvaluator so it includes that stack frame
+	// user should not see it, so remove:
+	err = [err[0]].concat(err.slice(3));		
 	return err.join('\n');
 }
+
+/* example error
+"Traceback (most recent call last):
+  File "pythonEvaluator.py", line 26, in <module>
+    exec(data['evalCode'], evalLocals)
+  line 4, in <module>
+NameError: name 'y' is not defined
+"
+*/
