@@ -60,6 +60,7 @@ function handleMouseMove(event){
  * sets a breakpoint
  */
 function handleGutterClick(cm, lineNum) {
+	
 	// if there is break clear all UI related to it (break, firstline, color)
 	if(stopAtLine != -1){
 	  cm.setGutterMarker(stopAtLine, "breakpoints",null);
@@ -96,6 +97,13 @@ function evalCode(codeLines){
 
 	if(stopAtLine > -1){
 		codeLines = getCodeUntillBreakpoint(codeLines);
+	}
+
+	if(codeLines.length == 0){
+		$("#results").html(renderjson({}));
+		$("#error").hide();
+		$("#error").text("");
+		return;
 	}
 
 	data = {
