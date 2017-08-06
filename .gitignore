@@ -2,3 +2,6 @@ node_modules
 .vscode/.ropeproject
 personal
 index.html
+src/python/.idea
+src/python/jsonpickle
+arepl-win32-x64
