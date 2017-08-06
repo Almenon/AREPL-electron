@@ -24,7 +24,7 @@ while True:
 
     try:
         exec(data['evalCode'], evalLocals)
-    except SystemExit:
+    except (KeyboardInterrupt, SystemExit):
         raise
     except Exception:
         errorMsg = traceback.format_exc()
