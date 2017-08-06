@@ -1,6 +1,7 @@
 {
   "name": "arepl",
-  "version": "1.0.0",
+  "productName":"arepl",
+  "version": "1.0.0-alpha.0",
   "description": "A python scratchpad with real-time code evaluation",
   "main": "main.js",
   "scripts": {
