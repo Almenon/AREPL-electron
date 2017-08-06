@@ -6,7 +6,8 @@
   "main": "main.js",
   "scripts": {
     "start": "concurrently \"electron .\" \"npm run compilePug\"",
-    "compilePug": "pug -w view/index.pug -o ./"
+    "compilePug": "pug -w view/index.pug -o ./",
+    "releaseBuild": "electron-packager . --overwrite"
   },
   "repository": "https://github.com/Almenon/AREPL",
   "keywords": [
