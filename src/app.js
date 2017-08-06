@@ -1,9 +1,9 @@
 var PythonShell = require('python-shell');
-var pyshell = new PythonShell('pythonEvaluator.py');
-var utils = require("./utils");
-var evals = require("./evaluators");
-var cmUtils = require("./cmUtils");
-var results = require("./data");
+var pyshell = new PythonShell('src/pythonEvaluator.py');
+var utils = require("./src/utils");
+var evals = require("./src/evaluators");
+var cmUtils = require("./src/cmUtils");
+var results = require("./src/data");
 
 var cm; //codemirror
 var noError = true;
