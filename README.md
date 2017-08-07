@@ -4,18 +4,7 @@ see it in action:
 
 ![Alt Text](https://puu.sh/x1a1U/1fdfd3899c.gif)
 
-### Installation:
-
-REQUIREMENTS:
-* python 3
-* npm
-
-1. clone this repository
-2. npm install
-3. pip install -r requirements.txt
-4. npm start
-
-The app should now be up and running.
+### Installation: see [github releases](https://github.com/Almenon/AREPL/releases)
 
 ### Features:
 * Real-time evaluation of code
@@ -23,3 +12,13 @@ The app should now be up and running.
 * Instant display of errors with stack trace
 * Breakpoints
 * Sublime key-bindings
+
+#### Deveveloper Setup:
+
+1. Install python 3 and npm (if not already installed)
+2. clone this repository
+3. npm install
+4. pip install -r requirements.txt
+5. npm start
+
+The app should now be up and running.
