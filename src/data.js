@@ -9,9 +9,9 @@ const identifier = "6q3co7";
 insertResult = function(pythonResults){
 
 	//if result should have identifier, otherwise it is just a printout from users code
-	if(pythonResults.length > identifier.length && pythonResults.slice(0,6) == identifier){
+	if(pythonResults.startsWith(identifier)){
 
-		pythonResults = pythonResults.replace("6q3co7","");
+		pythonResults = pythonResults.replace(identifier,"");
 		pythonResults = JSON.parse(pythonResults);
 
 		if(pythonResults["ERROR"] != ""){
