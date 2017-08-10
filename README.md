@@ -12,6 +12,7 @@ see it in action:
 * Instant display of errors with stack trace
 * Breakpoints
 * Sublime key-bindings
+* Batch Editing (via control)
 
 #### Deveveloper Setup:
 
