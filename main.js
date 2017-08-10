@@ -7,6 +7,14 @@ const url = require('url')
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
+require('electron-context-menu')({
+    prepend: (params, browserWindow) => [{
+        label: 'Rainbow',
+        // Only show it when right-clicking images 
+        visible: params.mediaType === 'image'
+    }]
+});
+
 //for checking if dev or release mode
 const getFromEnv = parseInt(process.env.ELECTRON_IS_DEV, 10) === 1;
 const isEnvSet = 'ELECTRON_IS_DEV' in process.env;
