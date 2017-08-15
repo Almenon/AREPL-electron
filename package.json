@@ -22,6 +22,7 @@
     "@types/codemirror": "0.0.41",
     "@types/jquery": "^3.2.6",
     "concurrently": "^3.5.0",
+    "devtron": "^1.4.0",
     "electron": "^1.6.11",
     "pug-cli": "^1.0.0-alpha6"
   },
