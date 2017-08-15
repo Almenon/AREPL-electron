@@ -17,13 +17,11 @@ insertResult = function(pythonResults){
 		if(pythonResults["ERROR"] != ""){
 			errorText = pythonResults["ERROR"];
 			errorText = formatPythonException(errorText);
-			$("#error").show("fast");
 			$("#error").text("⚠ " + errorText);
-			$(".spinner").css("visibility","hidden");
+			$("#error").show("fast");
 		}
 		else{
 			$("#error").hide();
-			$("#error").text("");
 		}
 		
 		if(pythonResults["userVariables"] != "" && pythonResults["userVariables"] != "{}"){
@@ -31,8 +29,8 @@ insertResult = function(pythonResults){
 			$("#results").html(
 				renderjson.set_icons('+', '-').set_show_to_level(2)(results)
 			)
-			printResults = []; //clear so empty for next program run
 		}
+		printResults = []; //clear so empty for next program run
 		$(".spinner").css("visibility","hidden");
 	}
 	else{
