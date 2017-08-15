@@ -50,7 +50,7 @@ def exec_input(codeToExec):
     # json dumps cant handle any object type, so we need to use jsonpickle
     # still has limitations but can handle much more
     try:
-        returnInfo['userVariables'] = jsonpickle.encode(userVariables)
+        returnInfo['userVariables'] = jsonpickle.encode(userVariables, max_depth=100) # any depth above 245 resuls in error and anything above 100 takes too long to process
     except (KeyboardInterrupt, SystemExit):
         raise
     except Exception:
