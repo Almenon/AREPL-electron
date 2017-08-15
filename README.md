@@ -1,10 +1,8 @@
 # AREPL: a real-time python scratchpad
 
-see it in action:
+[install here](https://github.com/Almenon/AREPL/releases) | see it in action below:
 
 ![Alt Text](https://puu.sh/x1a1U/1fdfd3899c.gif)
-
-### Installation: see [github releases](https://github.com/Almenon/AREPL/releases)
 
 ### Features:
 * Real-time evaluation of code
