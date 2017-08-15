@@ -51,8 +51,14 @@ pyshell.on('message', function (message) {
  * @param {string} err
  */
 function formatPythonException(err){
+
 	//unescape newlines
 	err = errorText.replace(/\\n/g, "\n");
+
+	if(errorText.startsWith("There has been a error when trying to display your variables")){
+		// formatting would not work for this exception because it happens outside of exec()
+		return errorText;
+	}
 
 	//replace File "<string>" (pointless)
 	err = err.replace(/File \"<string>\", /g, "");

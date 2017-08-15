@@ -49,7 +49,17 @@ def exec_input(codeToExec):
 
     # json dumps cant handle any object type, so we need to use jsonpickle
     # still has limitations but can handle much more
-    returnInfo['userVariables'] = jsonpickle.encode(userVariables)
+    try:
+        returnInfo['userVariables'] = jsonpickle.encode(userVariables)
+    except (KeyboardInterrupt, SystemExit):
+        raise
+    except Exception:
+        errorMsg = traceback.format_exc()
+        errorMsg = errorMsg.replace("\n", "\\n")
+        returnInfo['ERROR'] = "There has been a error when trying to display your variables. Sorry :( \n\n" + errorMsg
+
+
+
 
     return returnInfo
 
