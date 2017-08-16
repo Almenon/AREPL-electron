@@ -1,10 +1,9 @@
 block ScriptsAndLinks
   script(src='node_modules/jquery/dist/jquery.min.js')
-  //-
-    <script src="tippyjs-1.0.1\dist\tippy.min.js"></script>
-    just using normal tooltip for now, might use tippy in the future
   script(type='text/javascript', src='libraries/renderjson.js')
+
   script(src='src/app.js')
+  
   script(src='libraries/codemirror/lib/codemirror.js')
   script(src='libraries/codemirror/mode/python/python.js')
   script(src='libraries/codemirror/addon/search/search.js')
@@ -16,20 +15,9 @@ block ScriptsAndLinks
   script(src='libraries/codemirror/addon/edit/closebrackets.js')
   script(src='libraries/codemirror/addon/search/matchesonscrollbar.js')
   script(src='libraries/codemirror/addon/scroll/annotatescrollbar.js') // required by matchesonscrollbar.js
-  //-
-    <script src="codemirror/addon/fold/foldcode.js"></script> doesn't work with breakpoints - clicking code fold icon activates breakpoint
-    <script src="codemirror/addon/fold/foldgutter.js"></script>
-    <script src="codemirror/addon/fold/brace-fold.js"></script>
-    <script src="codemirror/addon/fold/indent-fold.js"></script>
+
   link(rel='stylesheet', href='libraries/codemirror/lib/codemirror.css')
   link(rel='stylesheet', href='libraries/codemirror/addon/dialog/dialog.css')
   link(rel='stylesheet', href='libraries/codemirror/addon/search/matchesonscrollbar.css')
-  // <link rel="stylesheet" href="codemirror/addon/fold/foldgutter.css" />
-  // <link rel="stylesheet" href="tippyjs-1.0.1\dist\tippy.css">
   link(rel='stylesheet', href='libraries/font-awesome-4.7.0/css/font-awesome.min.css')
   link(rel='stylesheet', href='view/myStyles.css')
-  // HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries
-  // WARNING: Respond.js doesn't work if you view the page via file://
-  //if lt IE 9
-    script(src='https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js')
-    script(src='https://oss.maxcdn.com/respond/1.4.2/respond.min.js')
