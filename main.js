@@ -22,7 +22,7 @@ devMode = isEnvSet ? getFromEnv : (process.defaultApp || /node_modules[\\/]elect
 
 function makeMenu(){
   const template = [
-    {
+        {
       label: 'Edit',
       submenu: [
         {role: 'undo'},
@@ -123,7 +123,10 @@ function createWindow () {
 
   makeMenu();
 
-  if(devMode) mainWindow.webContents.openDevTools()
+  if(devMode){
+    mainWindow.webContents.openDevTools();
+    require('devtron').install();
+  }
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
