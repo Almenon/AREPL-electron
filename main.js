@@ -22,7 +22,14 @@ devMode = isEnvSet ? getFromEnv : (process.defaultApp || /node_modules[\\/]elect
 
 function makeMenu(){
   const template = [
-        {
+    {
+      label: 'File',
+      submenu: [
+        {label: 'open'},
+        {label: 'save'}
+      ]
+    },
+    {
       label: 'Edit',
       submenu: [
         {role: 'undo'},

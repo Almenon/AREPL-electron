@@ -1,14 +1,17 @@
-var PythonShell = require('python-shell');
-var workingDirectory = require('path').dirname(require.main.filename);
-var pyshell = new PythonShell(workingDirectory + '\\src\\python\\pythonEvaluator.py');
-var utils = require("./src/utils");
-var evals = require("./src/evaluators");
-var cmUtils = require("./src/cmUtils");
-var results = require("./src/data");
+var utils = require("./utils");
+var evals = require("./evaluators");
+var cmUtils = require("./cmUtils");
 
 var cm; //codemirror
+module.exports.insertStringIntoEditor = function(content){
+	cm.setValue(content);
+};
+module.exports.getEditorContents = function(){
+	return cm.getValue();
+};
 var noError = true;
 var stopAtLine = -1;
+var PythonEvaluator = new evals.PythonEvaluator();
 
 ///////////////////////////////////////////////////////////////
 //				CODEMIRROR SETUP AND INPUT HANDLERS			
@@ -48,7 +51,7 @@ function handleSTDIN(){
  * displays variable's value if hovering over variable
  */
 function handleMouseMove(event){
-	var variable = cmUtils.getVariable(event);
+	var variable = cmUtils.getVariable(cm, event);
 	if(variable == undefined) return;
 
 	var result = results[variable];
@@ -113,7 +116,7 @@ function evalCode(codeLines){
 		evalCode: codeLines.join('\n')
 	}
 	
-	evals.PythonEvaluator(data);
+	PythonEvaluator.execCode(data);
 }
 
 /**
@@ -133,15 +136,4 @@ function getCodeUntillBreakpoint(codeLines){
 		}
 	}
 	return codeLines;
-}
-
-/**
- * todo: link up func to a button
- */
-function restartPython(){
-	pyshell.end(function (err) {
-	if (err) throw err;
-	console.log('finished');
-	});
-	pyshell = new PythonShell('pythonEvaluator.py');
 }

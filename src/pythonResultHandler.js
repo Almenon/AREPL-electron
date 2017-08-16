@@ -6,7 +6,7 @@ const identifier = "6q3co7";
  * deserializes result and creates a JSON display, as well as handling error messages / stdout
  * @param {string} pythonResults a single line of text, possibly in JSON format 
  */
-insertResult = function(pythonResults){
+module.exports.handleResult = function(pythonResults){
 
 	//if result should have identifier, otherwise it is just a printout from users code
 	if(pythonResults.startsWith(identifier)){
@@ -36,14 +36,8 @@ insertResult = function(pythonResults){
 	else{
 		printResults.push(pythonResults);
 		$("#stdout").text(printResults.join('\n'));
-		return;
 	}
 }
-
-pyshell.on('message', function (message) {
-  console.debug(message);
-  insertResult(message);
-});
 
 /**
  * @param {string} err

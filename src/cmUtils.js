@@ -7,7 +7,7 @@ module.exports.changePopups = function(e, result){
 		// sort of buggy so disabling
 }
 
-module.exports.getVariable = function(event){
+module.exports.getVariable = function(cm, event){
 	var pos = cm.coordsChar({left: event.pageX, top: event.pageY});
 
 	var tokenType = cm.getTokenTypeAt(pos);
