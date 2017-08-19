@@ -18,7 +18,11 @@ module.exports.PythonEvaluator = class{
 		this.PythonShell = require('python-shell');
 		var workingDirectory = require('path').dirname(require.main.filename);
 		this.pythonEvalFilePath = workingDirectory + '/src/python/'
-		
+
+		// for non-windows OS it is best to use python3 instead of python
+		// Mac and Ubuntu both have python being v2 by default
+		// archlinux and freebsd both use v3 as default, but also provide python3 command
+		this.pythonPath = process.platform != "win32" ? "python3" : "python";
 		
 		this.resultHandler = require("./pythonResultHandler");
 		this.results = this.resultHandler.results;
@@ -48,7 +52,10 @@ module.exports.PythonEvaluator = class{
 	}
 
 	startPython(){
-		this.pyshell = new this.PythonShell('pythonEvaluator.py', {scriptPath: this.pythonEvalFilePath});
+		this.pyshell = new this.PythonShell('pythonEvaluator.py', {
+			scriptPath: this.pythonEvalFilePath,
+			pythonPath: this.pythonPath,
+		});
 		this.pyshell.on('message', message => {
 			console.debug(message);
 			this.resultHandler.handleResult(message);
