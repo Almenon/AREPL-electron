@@ -16,8 +16,9 @@ module.exports.PythonEvaluator = class{
 	 */
 	constructor(){
 		this.PythonShell = require('python-shell');
-		var workingDirectory = require('path').dirname(require.main.filename)
-		this.pythonEvalFilePath = workingDirectory + '\\src\\python\\pythonEvaluator.py';
+		var workingDirectory = require('path').dirname(require.main.filename);
+		this.pythonEvalFilePath = workingDirectory + '/src/python/'
+		
 		
 		this.resultHandler = require("./pythonResultHandler");
 		this.results = this.resultHandler.results;
@@ -47,7 +48,7 @@ module.exports.PythonEvaluator = class{
 	}
 
 	startPython(){
-		this.pyshell = new this.PythonShell(this.pythonEvalFilePath);
+		this.pyshell = new this.PythonShell('pythonEvaluator.py', {scriptPath: this.pythonEvalFilePath});
 		this.pyshell.on('message', message => {
 			console.debug(message);
 			this.resultHandler.handleResult(message);
