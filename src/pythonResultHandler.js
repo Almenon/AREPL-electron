@@ -15,7 +15,7 @@ module.exports.handleResult = function(pythonResults){
 		pythonResults = JSON.parse(pythonResults);
 
 		if(pythonResults["ERROR"] != ""){
-			errorText = pythonResults["ERROR"];
+			var errorText = pythonResults["ERROR"];
 			errorText = formatPythonException(errorText);
 			$("#error").text("⚠ " + errorText);
 			$("#error").show("fast");
@@ -45,11 +45,11 @@ module.exports.handleResult = function(pythonResults){
 function formatPythonException(err){
 
 	//unescape newlines
-	err = errorText.replace(/\\n/g, "\n");
+	err = err.replace(/\\n/g, "\n");
 
-	if(errorText.startsWith("There has been a error when trying to display your variables")){
+	if(err.startsWith("There has been a error when trying to display your variables")){
 		// formatting would not work for this exception because it happens outside of exec()
-		return errorText;
+		return err;
 	}
 
 	//replace File "<string>" (pointless)
