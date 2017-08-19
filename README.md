@@ -17,7 +17,6 @@
 1. Install python 3 and npm (if not already installed)
 2. clone this repository
 3. npm install
-4. pip install -r requirements.txt
 5. npm start
 
 The app should now be up and running.
