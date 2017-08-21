@@ -1,4 +1,5 @@
 const {app, Menu, BrowserWindow} = require('electron')
+const { autoUpdater } = require("electron-updater");
 
 const path = require('path')
 const url = require('url')
@@ -19,6 +20,43 @@ require('electron-context-menu')({
 const getFromEnv = parseInt(process.env.ELECTRON_IS_DEV, 10) === 1;
 const isEnvSet = 'ELECTRON_IS_DEV' in process.env;
 devMode = isEnvSet ? getFromEnv : (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath));
+
+//-------------------------------------------------------------------
+// Auto-updates
+//-------------------------------------------------------------------
+
+function sendStatusToWindow(text) {
+  console.log(text);
+  mainWindow.webContents.send('upgradeMessage', text);
+}
+app.on('ready', function()  {
+  autoUpdater.checkForUpdates();
+});
+autoUpdater.on('checking-for-update', () => {
+  console.log('Checking for update...');
+});
+autoUpdater.on('update-available', (info) => {
+  sendStatusToWindow('Updating... Please wait');
+});
+autoUpdater.on('update-not-available', (info) => {
+  console.log('Update not available.');
+});
+autoUpdater.on('download-progress', (progressObj) => {
+  let log_message = "Download speed: " + progressObj.bytesPerSecond;
+  log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
+  log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
+  // todo: update info window with modal %
+});
+autoUpdater.on('update-downloaded', (info) => {
+  autoUpdater.quitAndInstall();
+});
+autoUpdater.on('error', (err) => {
+  sendStatusToWindow('Error in auto-updater.');
+});
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 
 function makeMenu(){
   const template = [

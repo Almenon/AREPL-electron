@@ -7,3 +7,4 @@ arepl-win32-x64
 arepl-win32-x64.7z
 *.pyc
 .DS_Store
+dist
