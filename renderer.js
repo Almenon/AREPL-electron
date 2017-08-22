@@ -1,16 +1,15 @@
 // this file has interaction between browser and electron API
-const {remote} = require('electron')
-const {Menu, MenuItem, dialog} = remote
+const {remote, ipcRenderer} = require('electron')
+const {dialog} = remote
 const fs = require('fs');
 var editor = require("./src/app");
 
-var FileMenu = new MenuItem({
-      label: 'File',
-      submenu: [
-        {label: 'open', click () { openFile(); }},
-        {label: 'save', click () { saveFile(); }}
-      ]
-});
+ipcRenderer.on('openFileMenuClick',()=>{
+    openFile();
+})
+ipcRenderer.on('saveFileMenuClick',()=>{
+    saveFile();
+})
 
 
 function openFile(){
@@ -46,6 +45,3 @@ function saveFile(){
         });
     }); 
 }
-
-var applicationMenu = Menu.getApplicationMenu();
-applicationMenu.insert(0,FileMenu);

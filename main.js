@@ -2,11 +2,13 @@ const {app, Menu, BrowserWindow} = require('electron')
 
 const path = require('path')
 const url = require('url')
+const menuHelper = require('./menuHelper')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
 
+//electron-context-menu necessary for menu upon right-click
 require('electron-context-menu')({
     prepend: (params, browserWindow) => [{
         label: 'Rainbow',
@@ -15,106 +17,10 @@ require('electron-context-menu')({
     }]
 });
 
-//for checking if dev or release mode
-const getFromEnv = parseInt(process.env.ELECTRON_IS_DEV, 10) === 1;
-const isEnvSet = 'ELECTRON_IS_DEV' in process.env;
-devMode = isEnvSet ? getFromEnv : (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath));
-
-function makeMenu(){
-  const template = [
-    {
-      label: 'File',
-      submenu: [
-        {label: 'open'},
-        {label: 'save'}
-      ]
-    },
-    {
-      label: 'Edit',
-      submenu: [
-        {role: 'undo'},
-        {role: 'redo'},
-        {type: 'separator'},
-        {role: 'cut'},
-        {role: 'copy'},
-        {role: 'paste'},
-        {role: 'pasteandmatchstyle'},
-        {role: 'delete'},
-        {role: 'selectall'}
-      ]
-    },
-    {
-      label: 'View',
-      submenu: [
-        {role: 'reload'},
-        {role: 'forcereload'},
-        {role: 'toggledevtools'},
-        {type: 'separator'},
-        {role: 'resetzoom'},
-        {role: 'zoomin'},
-        {role: 'zoomout'},
-        {type: 'separator'},
-        {role: 'togglefullscreen'}
-      ]
-    },
-    {
-      role: 'window',
-      submenu: [
-        {role: 'minimize'},
-        {role: 'close'}
-      ]
-    },
-    {
-      role: 'help',
-      submenu: [
-        {
-          label: 'Learn More',
-          click () { require('electron').shell.openExternal('https://github.com/Almenon/AREPL') }
-        }
-      ]
-    }
-  ]
-
-  if (process.platform === 'darwin') {
-    template.unshift({
-      label: app.getName(),
-      submenu: [
-        {role: 'about'},
-        {type: 'separator'},
-        {role: 'services', submenu: []},
-        {type: 'separator'},
-        {role: 'hide'},
-        {role: 'hideothers'},
-        {role: 'unhide'},
-        {type: 'separator'},
-        {role: 'quit'}
-      ]
-    })
-
-    // Edit menu
-    template[1].submenu.push(
-      {type: 'separator'},
-      {
-        label: 'Speech',
-        submenu: [
-          {role: 'startspeaking'},
-          {role: 'stopspeaking'}
-        ]
-      }
-    )
-
-    // Window menu
-    template[3].submenu = [
-      {role: 'close'},
-      {role: 'minimize'},
-      {role: 'zoom'},
-      {type: 'separator'},
-      {role: 'front'}
-    ]
-  }
-
-  const menu = Menu.buildFromTemplate(template)
-  Menu.setApplicationMenu(menu)
+function isDevMode(){
+  const getFromEnv = parseInt(process.env.ELECTRON_IS_DEV, 10) === 1;
+  const isEnvSet = 'ELECTRON_IS_DEV' in process.env;
+  return isEnvSet ? getFromEnv : (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath));
 }
 
 function createWindow () {
@@ -126,11 +32,11 @@ function createWindow () {
     pathname: path.join(__dirname, 'index.html'),
     protocol: 'file:',
     slashes: true
-  }))
+  }));
 
-  makeMenu();
+  menuHelper.makeMenu(mainWindow);
 
-  if(devMode){
+  if(isDevMode()){
     mainWindow.webContents.openDevTools();
     require('devtron').install();
   }
@@ -141,7 +47,7 @@ function createWindow () {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null
-  })
+  });
 }
 
 // This method will be called when Electron has finished
@@ -165,6 +71,3 @@ app.on('activate', function () {
     createWindow()
   }
 })
-
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
