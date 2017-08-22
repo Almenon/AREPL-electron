@@ -1,13 +1,13 @@
 {
   "name": "arepl",
   "productName": "arepl",
-  "version": "1.0.0-alpha.1",
+  "version": "1.0.0-alpha.2",
   "description": "A python scratchpad with real-time code evaluation",
   "main": "main.js",
   "scripts": {
     "start": "concurrently \"electron .\" \"npm run compilePug\"",
     "compilePug": "pug -w view/index.pug -o ./",
-    "releaseBuild": "electron-packager . --overwrite"
+    "releaseBuild": "electron-packager . --overwrite",
   },
   "repository": "https://github.com/Almenon/AREPL",
   "keywords": [
