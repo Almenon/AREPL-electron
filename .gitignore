@@ -5,5 +5,7 @@ index.html
 src/python/.idea
 arepl-win32-x64
 arepl-win32-x64.7z
+arepl-linux-x64
+arepl-linux-x64.7z
 *.pyc
 .DS_Store
