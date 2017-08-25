@@ -23,7 +23,6 @@ $(function(){ //reference html elements after page load
 		lineNumbers: true,
 		gutters: ["CodeMirror-linenumbers", "breakpoints"],
 		keyMap: "sublime",
-		autoCloseBrackets: true,
 		matchBrackets: true,
 	});
 	$(".CodeMirror").keyup(()=>{utils.delay(handleInput, 300)}); //delay 300ms to wait for user to finish typing.  doesn't seem to help too much though :/
