@@ -47,12 +47,34 @@ module.exports.PythonEvaluator = class{
 		this.pyshell.send(message);
 	}
 
+	/**
+	 * kills python process and restarts.  Force-kills if necessary.
+	 */
 	restart(){
-		this.pyshell.end(err => {
-			if (err) throw err;
-			console.log('finished');
+		
+		var restarting = false;
+
+		// register callback for restart
+		// using childProcess callback instead of pyshell callback
+		// (pyshell callback only happens when process exits voluntarily)
+		this.pyshell.childProcess.on('exit',()=>{
+			restarting = true;
+			this.startPython();
 		});
-		this.startPython();
+
+		// pyshell has 50 ms to die gracefully
+		var dead = this.pyshell.childProcess.kill();
+		if(!dead) console.info("pyshell refused to die")
+
+		setTimeout(()=>{
+			if(!dead && !restarting){
+				// murder the process with extreme prejudice
+				dead = this.pyshell.childProcess.kill('SIGKILL');
+				if(!dead){
+					console.error("the python process simply cannot be killed!")
+				}
+			}
+		}, 50);
 	}
 
 
