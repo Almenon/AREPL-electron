@@ -41,9 +41,13 @@ module.exports.PythonEvaluator = class{
 	}
 
 	/**
-	 * todo: link up func to a button
+	 * @param {string} message 
 	 */
-	stopRunningExec(){
+	sendStdin(message){
+		this.pyshell.send(message);
+	}
+
+	restart(){
 		this.pyshell.end(err => {
 			if (err) throw err;
 			console.log('finished');
@@ -51,7 +55,9 @@ module.exports.PythonEvaluator = class{
 		this.startPython();
 	}
 
+
 	startPython(){
+		console.log("Starting Python...")
 		this.pyshell = new this.PythonShell('pythonEvaluator.py', {
 			scriptPath: this.pythonEvalFilePath,
 			pythonPath: this.pythonPath,

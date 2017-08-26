@@ -43,7 +43,7 @@ module.exports.getEditorContents = function(){
 function toggleRealTimeEval(){realTimeEvalEnabled = !realTimeEvalEnabled}
 
 function restartExec(){
-	PythonEvaluator.stopRunningExec();
+	PythonEvaluator.restart();
 	$(".spinner").css("visibility","hidden");
 }
 
@@ -68,7 +68,7 @@ function runOnce(){
 function handleSTDIN(){
 	var text = $("#stdin").val();
 	$("#stdin").val("");
-	pyshell.send(text);
+	PythonEvaluator.sendStdin(text);
 }
 
 /**
