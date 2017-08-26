@@ -3,15 +3,10 @@ var evals = require("./evaluators");
 var cmUtils = require("./cmUtils");
 
 var cm; //codemirror
-module.exports.insertStringIntoEditor = function(content){
-	cm.setValue(content);
-};
-module.exports.getEditorContents = function(){
-	return cm.getValue();
-};
 var noError = true;
 var stopAtLine = -1;
 var PythonEvaluator = new evals.PythonEvaluator();
+var realTimeEvalEnabled = true;
 
 ///////////////////////////////////////////////////////////////
 //				CODEMIRROR SETUP AND INPUT HANDLERS			
@@ -23,21 +18,51 @@ $(function(){ //reference html elements after page load
 		lineNumbers: true,
 		gutters: ["CodeMirror-linenumbers", "breakpoints"],
 		keyMap: "sublime",
+		extraKeys: {
+			"F1": restartExec,
+			"F4": toggleRealTimeEval,
+			"F5": runOnce
+		},
 		matchBrackets: true,
 	});
-	$(".CodeMirror").keyup(()=>{utils.delay(handleInput, 300)}); //delay 300ms to wait for user to finish typing.  doesn't seem to help too much though :/
+	$(".CodeMirror").keyup((e)=>{
+		if(e.key == "F1") return; //in case user restarted because of infinite loop we don't want to immediately evaluate again
+		utils.delay(handleInput, 300)}); //delay 300ms to wait for user to finish typing.  doesn't seem to help too much though :/
 	$(".CodeMirror").mousemove(handleMouseMove);
 	$("#stdin").keyup((e) => {if(e.key == "Enter") handleSTDIN()});
 	cm.on('gutterClick', handleGutterClick)
 });
 
+module.exports.insertStringIntoEditor = function(content){
+	cm.setValue(content);
+};
+module.exports.getEditorContents = function(){
+	return cm.getValue();
+};
+
+function toggleRealTimeEval(){realTimeEvalEnabled = !realTimeEvalEnabled}
+
+function restartExec(){
+	PythonEvaluator.stopRunningExec();
+	$(".spinner").css("visibility","hidden");
+}
+
 /**
  * evaluates codemirror content
  */
 function handleInput(){
+	if(!realTimeEvalEnabled) return;
 	var text = cm.getValue().split('\n')
 	if(text.length == 1 && text[0].length == 0) return;
 	evalCode(text)
+}
+
+function runOnce(){
+	if(realTimeEvalEnabled) return; //no point in running once if realTimeEval is enabled
+
+	realTimeEvalEnabled = true;
+	handleInput();
+	realTimeEvalEnabled = false;
 }
 
 function handleSTDIN(){
