@@ -16,8 +16,7 @@ module.exports.PythonEvaluator = class{
 	 */
 	constructor(){
 		this.PythonShell = require('python-shell');
-		var workingDirectory = require('path').dirname(require.main.filename);
-		this.pythonEvalFilePath = workingDirectory + '/src/python/'
+		this.pythonEvalFilePath = process.cwd() + '/src/python/'
 
 		// for non-windows OS it is best to use python3 instead of python
 		// Mac and Ubuntu both have python being v2 by default

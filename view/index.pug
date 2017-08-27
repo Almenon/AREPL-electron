@@ -5,6 +5,7 @@ html(lang='en')
     meta(http-equiv='X-UA-Compatible', content='IE=edge')
     meta(name='viewport', content='width=device-width, initial-scale=1')
     // The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags
+    base(href="../")
     script.
       // electron stuff from quickstart - not sure what it does
       if (typeof module === 'object') {
@@ -18,4 +19,4 @@ html(lang='en')
     include main
   script.
     // You can also require other files to run in this process
-    require('./src/electron/renderer.js')
+    require(process.cwd() + '/src/electron/renderer.js')
