@@ -4,7 +4,11 @@ personal
 index.html
 src/python/.idea
 arepl-win32-x64
+arepl-darwin-x64
+arepl-linux-x64
 arepl-win32-x64.7z
+arepl-darwin-x64.7z
+yarn-error.log
 *.pyc
 .DS_Store
 dist
