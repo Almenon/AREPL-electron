@@ -3,7 +3,7 @@
   "productName": "arepl",
   "version": "1.0.0-alpha.2",
   "description": "A python scratchpad with real-time code evaluation",
-  "main": "main.js",
+  "main": "src/electron/main.js",
   "scripts": {
     "start": "concurrently \"electron .\" \"npm run compilePug\"",
     "compilePug": "pug -w view/index.pug -o ./",

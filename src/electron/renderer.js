@@ -2,7 +2,7 @@
 const {remote, ipcRenderer} = require('electron')
 const {dialog} = remote
 const fs = require('fs');
-var editor = require("./src/app");
+var editor = require("../app");
 
 ipcRenderer.on('openFileMenuClick',()=>{
     openFile();
