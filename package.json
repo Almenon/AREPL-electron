@@ -36,6 +36,7 @@
     "python-shell": "^0.4.0"
   },
   "build": {
+    "app-category-type": "public.app-category.developer-tools",
     "publish": "github"
   }
 }
