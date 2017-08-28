@@ -12,3 +12,4 @@ yarn-error.log
 *.pyc
 .DS_Store
 dist
+npm-debug.log
