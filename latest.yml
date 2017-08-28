@@ -1,7 +1,7 @@
-version: 1.0.0-alpha.1
-releaseDate: '2017-08-06T19:52:36.263Z'
-githubArtifactName: arepl-win32-x64.7zqfeqfe
-path: arepl win32 x64.fefqefq
+version: 1.0.0-alpha.2
+releaseDate: '2017-08-20T19:52:36.263Z'
+githubArtifactName: arepl-win32-x64.zip
+path: arepl win32 x64
 sha512: >-
-  0G3T7X0qgqW4fUeWDU3RxR02VEIofsA0ICqpdHDQlWB7uDPSPHnVrdwXH6rVfSba3pvFzyNZ//02R66gJRkrIw==
-sha2: 4a44c53bd2abbfb0f33d928354befc53cada1b9a54911f7eff00a841a1467f72
+  BMLPuM/j+OnjrdefvLdvVRpRNla7zrgLFD2810T9zGncCr1zg0wzY82xY1vb6KpERYWJ3sI9VAOicmLqdxohEw==
+sha2: 82c0d57aca2a2f175a136f7d5444a9fb8633968ec7df01277677cf5cdf03a191
