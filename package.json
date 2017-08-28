@@ -36,7 +36,11 @@
     "python-shell": "^0.4.0"
   },
   "build": {
-    "app-category-type": "public.app-category.developer-tools",
-    "publish": "github"
+    "appId":"com.almenon.arepl",
+    "mac": {
+      "category": "public.app-category.developer-tools"
+    },
+    "publish": "github",
+    "files": ["!arepl-darwin-x64", "!arepl-linux-x64", "!arepl-win32-x64"]
   }
 }
