@@ -16,8 +16,14 @@ module.exports.PythonEvaluator = class{
 	 */
 	constructor(){
 		this.PythonShell = require('python-shell');
-		var workingDirectory = require('path').dirname(require.main.filename);
-		this.pythonEvalFilePath = workingDirectory + '/src/python/'
+		const path = require('path');
+		var workingDirectory = path.dirname(require.main.filename);
+		if(workingDirectory.endsWith("app.asar")){
+			this.pythonEvalFilePath = path.parse(workingDirectory).dir;
+		}
+		else{
+			this.pythonEvalFilePath = workingDirectory + '/src/python/'
+		}
 
 		// for non-windows OS it is best to use python3 instead of python
 		// Mac and Ubuntu both have python being v2 by default

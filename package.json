@@ -41,6 +41,7 @@
       "category": "public.app-category.developer-tools"
     },
     "publish": "github",
-    "files": ["!arepl-darwin-x64", "!arepl-linux-x64", "!arepl-win32-x64"]
+    "files": ["!arepl-darwin-x64", "!arepl-linux-x64", "!arepl-win32-x64"],
+    "extraResources":"src/python"
   }
 }
