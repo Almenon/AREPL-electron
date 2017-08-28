@@ -26,7 +26,6 @@ devMode = isEnvSet ? getFromEnv : (process.defaultApp || /node_modules[\\/]elect
 //-------------------------------------------------------------------
 
 function sendStatusToWindow(text) {
-  console.log(text);
   mainWindow.webContents.send('upgradeMessage', text);
 }
 app.on('ready', function()  {
@@ -45,12 +44,13 @@ autoUpdater.on('download-progress', (progressObj) => {
   let log_message = "Download speed: " + progressObj.bytesPerSecond;
   log_message = log_message + ' - Downloaded ' + progressObj.percent + '%';
   log_message = log_message + ' (' + progressObj.transferred + "/" + progressObj.total + ')';
-  // todo: update info window with modal %
+  // todo: show user %
 });
 autoUpdater.on('update-downloaded', (info) => {
   autoUpdater.quitAndInstall();
 });
 autoUpdater.on('error', (err) => {
+  console.error(err);
   sendStatusToWindow('Error in auto-updater.');
 });
 
