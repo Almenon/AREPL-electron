@@ -27,10 +27,10 @@
     "devtron": "^1.4.0",
     "electron": "^1.6.11",
     "electron-builder": "^19.26.0",
-    "electron-updater": "^2.8.7",
     "pug-cli": "^1.0.0-alpha6"
   },
   "dependencies": {
+    "electron-updater": "^2.8.7",
     "electron-context-menu": "^0.9.1",
     "jquery": "^3.2.1",
     "python-shell": "^0.4.0"
