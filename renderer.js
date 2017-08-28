@@ -15,6 +15,7 @@ var editor = require("./src/app");
 
 require('electron').ipcRenderer.on('upgradeMessage', (event, message) => {
     console.log(message);
+    dialog.showMessageBox({detail: message});
     //if(modal.style.display == "none") modal.style.display = "block";
     //modalText.textContent = message;
 });
