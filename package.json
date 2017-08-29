@@ -1,7 +1,7 @@
 {
   "name": "arepl",
   "productName": "arepl",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0-alpha.3",
   "description": "A python scratchpad with real-time code evaluation",
   "main": "src/electron/main.js",
   "scripts": {
@@ -27,6 +27,7 @@
     "pug-cli": "^1.0.0-alpha6"
   },
   "dependencies": {
+    "electron-updater": "^2.8.7",
     "electron-context-menu": "^0.9.1",
     "jquery": "^3.2.1",
     "python-shell": "^0.4.0"
