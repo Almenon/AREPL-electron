@@ -61,9 +61,17 @@ function createWindow () {
     title: 'AREPL ' + app.getVersion()
   })
 
+  let indexHtmlPath = process.cwd();
+  if(indexHtmlPath.endsWith("arepl-win32-x64")){ //production build
+    indexHtmlPath = indexHtmlPath + '/resources/app/view/index.html';
+  }
+  else{
+    indexHtmlPath = indexHtmlPath + '/view/index.html';
+  }
+
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
-    pathname: process.cwd() + '/view/index.html',
+    pathname: indexHtmlPath,
     protocol: 'file:',
     slashes: true
   }));

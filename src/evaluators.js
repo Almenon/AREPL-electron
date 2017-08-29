@@ -16,7 +16,13 @@ module.exports.PythonEvaluator = class{
 	 */
 	constructor(){
 		this.PythonShell = require('python-shell');
-		this.pythonEvalFilePath = process.cwd() + '/src/python/'
+
+		let rootPath = process.cwd();
+		if(rootPath.endsWith("arepl-win32-x64")){
+		  rootPath = rootPath + '/resources/app';
+		}
+
+		this.pythonEvalFilePath = rootPath + '/src/python/';
 
 		// for non-windows OS it is best to use python3 instead of python
 		// Mac and Ubuntu both have python being v2 by default

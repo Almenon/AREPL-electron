@@ -19,4 +19,9 @@ html(lang='en')
     include main
   script.
     // You can also require other files to run in this process
-    require(process.cwd() + '/src/electron/renderer.js')
+    let rendererPath = process.cwd();
+    if(rendererPath.endsWith("arepl-win32-x64")){
+      rendererPath = rendererPath + '/resources/app';
+    }
+    rendererPath = rendererPath + '/src/electron/renderer.js';
+    require(rendererPath);
