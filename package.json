@@ -7,7 +7,9 @@
   "scripts": {
     "start": "concurrently \"electron .\" \"npm run compilePug\"",
     "compilePug": "pug -w view/index.pug -o view",
-    "releaseBuild": "electron-packager . --overwrite"
+    "releaseBuildWin": "electron-packager . --overwrite",
+    "releaseBuildMac": "electron-packager . --overwrite --platform=darwin",
+    "releaseBuildLinux": "electron-packager . --overwrite --platform=linux"
   },
   "repository": "https://github.com/Almenon/AREPL",
   "keywords": [
