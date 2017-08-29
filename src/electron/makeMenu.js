@@ -13,10 +13,6 @@ const helpSubmenu = [
     {
       label: 'Search or report a issue',
       click () { require('electron').shell.openExternal('https://github.com/Almenon/AREPL/issues') }
-    },
-    {
-      label: 'Releases',
-      click () { require('electron').shell.openExternal('https://github.com/Almenon/AREPL/releases') }
     }
   ];
 
@@ -46,6 +42,10 @@ const fileMenu = {
   ]
 }
 
+/**
+ * sets Application menu to custom AREPL menu
+ * @returns {object[]} menu template
+ */
 module.exports.makeMenu = function(mainWindow){
   var template = defaultMenu();
   
@@ -63,4 +63,5 @@ module.exports.makeMenu = function(mainWindow){
 
   const menu = Menu.buildFromTemplate(template);
   Menu.setApplicationMenu(menu);
+  return template;
 }

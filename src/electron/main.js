@@ -1,4 +1,5 @@
 const {app, Menu, BrowserWindow} = require('electron')
+const { autoUpdater } = require("electron-updater");
 
 const path = require('path')
 const url = require('url')
@@ -7,6 +8,7 @@ const makeMenu = require('./makeMenu')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
+let menuTemplate
 
 //electron-context-menu necessary for menu upon right-click
 require('electron-context-menu')({
@@ -23,7 +25,35 @@ function isDevMode(){
   return isEnvSet ? getFromEnv : (process.defaultApp || /node_modules[\\/]electron[\\/]/.test(process.execPath));
 }
 
+/**
+ * if update-availible event fired handler will append menu item to download latest release
+ * i reccomend doing calling this after menu creation and before checking for update
+ */
+function registerAutoUpdateHandlers(){
+  autoUpdater.on('checking-for-update', () => {
+    console.log('Checking for update...');
+  });
+  autoUpdater.on('update-available', (info) => {
+    const updateAvailibleMenu = {
+      label: "New update availible",
+      submenu: [{
+        label: "release info",
+        click: () => { require('electron').shell.openExternal('https://github.com/Almenon/AREPL/releases') }
+      }]
+    }
+    menuTemplate.push(updateAvailibleMenu);
+    Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
+  });
+  autoUpdater.on('update-not-available', (info) => {
+    console.log('Update not available.');
+  });
+  autoUpdater.on('error', (err) => {
+    console.error(err);
+  });
+}
+
 function createWindow () {
+
   // Create the browser window.
   mainWindow = new BrowserWindow({
     width: 800, 
@@ -38,7 +68,11 @@ function createWindow () {
     slashes: true
   }));
 
-  makeMenu.makeMenu(mainWindow);
+  menuTemplate = makeMenu.makeMenu(mainWindow);
+
+  registerAutoUpdateHandlers();
+  autoUpdater.autoDownload = false;
+  autoUpdater.checkForUpdates();
 
   if(isDevMode()){
     mainWindow.webContents.openDevTools();
