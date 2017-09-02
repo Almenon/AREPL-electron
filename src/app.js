@@ -138,6 +138,8 @@ function evalCode(codeLines){
 		evalCode: codeLines.join('\n')
 	}
 	
+	$(".spinner").css("visibility","visible");
+	$("#stdout").text("");
 	PythonEvaluator.execCode(data);
 }
 
