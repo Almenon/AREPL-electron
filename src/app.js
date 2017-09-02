@@ -135,8 +135,6 @@ function evalCode(codeLines){
 	}
 
 	data = {
-		setting: "",
-		setupCode: "",
 		evalCode: codeLines.join('\n')
 	}
 	
