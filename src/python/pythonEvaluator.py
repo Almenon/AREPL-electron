@@ -48,9 +48,6 @@ def exec_input(codeToExec):
         errorMsg = errorMsg.replace("\n", "\\n")
         returnInfo['ERROR'] = "There has been a error when trying to display your variables. Sorry :( \n\n" + errorMsg
 
-
-
-
     return returnInfo
 
 
