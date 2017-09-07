@@ -41,8 +41,6 @@ module.exports.PythonEvaluator = class{
 	 */
 	execCode(code){
 		this.pyshell.send(JSON.stringify(code));
-		$(".spinner").css("visibility","visible");
-		$("#stdout").text("");
 	}
 
 	/**

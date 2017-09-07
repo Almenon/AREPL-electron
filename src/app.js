@@ -25,9 +25,7 @@ $(function(){ //reference html elements after page load
 		},
 		matchBrackets: true,
 	});
-	$(".CodeMirror").keyup((e)=>{
-		if(e.key == "F1") return; //in case user restarted because of infinite loop we don't want to immediately evaluate again
-		utils.delay(handleInput, 300)}); //delay 300ms to wait for user to finish typing.  doesn't seem to help too much though :/
+	cm.on("changes",(doc, changes)=>{utils.delay(handleInput, 300)}); //delay 300ms to wait for user to finish typing
 	$(".CodeMirror").mousemove(handleMouseMove);
 	$("#stdin").keyup((e) => {if(e.key == "Enter") handleSTDIN()});
 	cm.on('gutterClick', handleGutterClick)
@@ -135,11 +133,11 @@ function evalCode(codeLines){
 	}
 
 	data = {
-		setting: "",
-		setupCode: "",
 		evalCode: codeLines.join('\n')
 	}
 	
+	$(".spinner").css("visibility","visible");
+	$("#stdout").text("");
 	PythonEvaluator.execCode(data);
 }
 
