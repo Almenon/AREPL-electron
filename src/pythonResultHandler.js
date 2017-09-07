@@ -1,6 +1,9 @@
 module.exports.results = {};
 var printResults = [];
 const identifier = "6q3co7";
+const jsonRenderer = renderjson.set_icons('+', '-') // default icons look a bit wierd, overriding
+.set_show_to_level(2) // 2 shows x=1 and x=[1,2], provides option to expand  deeply nested data like x=[[1]]
+.set_max_string_length(70); // 70 fits in 1280 screen
 
 /**
  * deserializes result and creates a JSON display, as well as handling error messages / stdout
@@ -26,9 +29,7 @@ module.exports.handleResult = function(pythonResults){
 		
 		if(pythonResults["userVariables"] != "" && pythonResults["userVariables"] != "{}"){
 			results = JSON.parse(pythonResults["userVariables"]);
-			$("#results").html(
-				renderjson.set_icons('+', '-').set_show_to_level(2)(results)
-			)
+			$("#results").html(jsonRenderer(results))
 		}
 		printResults = []; //clear so empty for next program run
 		$(".spinner").css("visibility","hidden");
