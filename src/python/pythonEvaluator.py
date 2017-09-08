@@ -1,8 +1,18 @@
-import json
-import traceback
-import jsonpickle
 from copy import deepcopy
+import datetime
+import json
+import jsonpickle
+import traceback
 
+class DatetimeHandler(jsonpickle.handlers.BaseHandler):
+    ### better represention of datetime, see https://github.com/jsonpickle/jsonpickle/issues/109 ###
+    def flatten(self, obj, data):
+        x = {"date/time": str(obj)}
+        return x
+
+jsonpickle.handlers.register(datetime.date, DatetimeHandler)
+jsonpickle.handlers.register(datetime.time, DatetimeHandler)
+jsonpickle.handlers.register(datetime.datetime, DatetimeHandler)
 jsonpickle.set_encoder_options('json', ensure_ascii=False)
 
 # copy all special vars (we want execd code to have similar locals as actual code)
