@@ -37,7 +37,7 @@ module.exports.PythonEvaluator = class{
 
 	
 	/**
-	 * @param {string} code 
+	 * @param {{evalCode:string}} code 
 	 */
 	execCode(code){
 		this.pyshell.send(JSON.stringify(code));
