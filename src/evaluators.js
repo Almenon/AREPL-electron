@@ -22,7 +22,7 @@ module.exports.PythonEvaluator = class{
 		  rootPath = rootPath + '/resources/app';
 		}
 
-		this.pythonEvalFilePath = rootPath + '/src/python/';
+		this.pythonEvalFolderPath = rootPath + '/src/python/';
 
 		// for non-windows OS it is best to use python3 instead of python
 		// Mac and Ubuntu both have python being v2 by default
@@ -84,7 +84,7 @@ module.exports.PythonEvaluator = class{
 	startPython(){
 		console.log("Starting Python...")
 		this.pyshell = new this.PythonShell('pythonEvaluator.py', {
-			scriptPath: this.pythonEvalFilePath,
+			scriptPath: this.pythonEvalFolderPath,
 			pythonPath: this.pythonPath,
 		});
 		this.pyshell.on('message', message => {
