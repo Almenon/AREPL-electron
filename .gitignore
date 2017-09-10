@@ -12,4 +12,4 @@ arepl-darwin-x64.*
 dist
 *.pyc
 .DS_Store
-npm-debug.log
+npm-debug.log.*
