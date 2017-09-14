@@ -94,7 +94,7 @@ function adaptTemplateForMac(template){
  */
 module.exports = function(){
     if (process.platform === 'darwin'){
-        template = adaptTemplateForMac(template);
+        let template = adaptTemplateForMac(template);
     }
     return template;
 }

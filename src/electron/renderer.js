@@ -17,7 +17,7 @@ function openFile(){
         if(filePaths === undefined) return; //cancel was clicked
 
         //only single-file open is supported so there will always just be one file
-        filePath = filePaths[0];
+        let filePath = filePaths[0];
 
         fs.readFile(filePath, 'utf-8', (err, data) => {
             if(err){
@@ -36,7 +36,7 @@ function saveFile(){
     dialog.showSaveDialog((filePath) => {
         if(filePath === undefined) return; //cancel was clicked
 
-        content = editor.getEditorContents();
+        let content = editor.getEditorContents();
 
         fs.writeFile(filePath, content, (err) => {
             if(err){

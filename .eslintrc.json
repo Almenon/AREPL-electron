@@ -1,0 +1,53 @@
+{
+    "env": {
+        "browser": true,
+        "commonjs": true,
+        "es6": true,
+        "node": true
+    },
+    "parserOptions": {
+        "ecmaFeatures": {
+            "jsx": true
+        },
+        "sourceType": "module"
+    },
+    "rules": {
+        "no-const-assign": "error",
+        "no-this-before-super": "error",
+        "no-undef": "error",
+        "no-unreachable": "error",
+        "no-unused-vars": "warn",
+        "constructor-super": "error",
+        "valid-typeof": "error",	
+        "for-direction":"warn",
+        "getter-return":"warn",
+        "use-isnan":"warn",
+        "no-await-in-loop":"warn",
+        "no-compare-neg-zero":"warn",
+        "no-cond-assign":"warn",
+        "no-constant-condition":"warn",
+        "no-control-regex":"warn",
+        "no-debugger":"warn",
+        "no-dupe-args":"warn",
+        "no-dupe-keys":"warn",
+        "no-duplicate-case":"warn",
+        "no-empty":"warn",
+        "no-empty-character-class":"warn",
+        "no-ex-assign":"warn",
+        "no-extra-boolean-cast":"warn",
+        "no-extra-parens":"warn",
+        "no-extra-semi":"warn",
+        "no-func-assign":"warn",
+        "no-inner-declarations":"warn",
+        "no-invalid-regexp":"warn",
+        "no-irregular-whitespace":"warn",
+        "no-obj-calls":"warn",
+        "no-prototype-builtins":"warn",
+        "no-regex-spaces":"warn",
+        "no-sparse-arrays":"warn",
+        "no-template-curly-in-string":"warn",
+        "no-unexpected-multiline":"warn",
+        "no-unsafe-finally":"warn",
+        "no-unsafe-negation":"warn"
+    }
+}

@@ -10,12 +10,6 @@ module.exports.noChange = function(oldText, text){
 	});
 }
 
-module.exports.getLineNumber = function(cm, indicator) {
-	var lineNumber = cm.getValue().substr(0, textarea.selectionStart).split("\n").length;
-	indicator.innerHTML = lineNumber;
-	return lineNumber;
-}
-
 /**
  * taken from https://codemirror.net/demo/marker.html
  */

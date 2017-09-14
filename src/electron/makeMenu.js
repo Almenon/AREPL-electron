@@ -54,10 +54,10 @@ module.exports.makeMenu = function(mainWindow){
 
   // File menu modificatoins
   template.unshift(fileMenu);
-  template[0].submenu[0].click = (menuItem, browserWindow, event) => {
+  template[0].submenu[0].click = () => {
     mainWindow.webContents.send('openFileMenuClick', null);
   }
-  template[0].submenu[1].click = (menuItem, browserWindow, event) => {
+  template[0].submenu[1].click = () => {
     mainWindow.webContents.send('saveFileMenuClick', null);
   }
 

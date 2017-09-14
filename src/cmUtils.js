@@ -1,3 +1,5 @@
+/*global $*/
+
 module.exports.changePopups = function(e, result){
 	$(".cm-variable").attr('title', JSON.stringify(result));
 	  	// tippy('.cm-variable', 
@@ -12,7 +14,7 @@ module.exports.getVariable = function(cm, event){
 
 	var tokenType = cm.getTokenTypeAt(pos);
 	if(tokenType == "variable"){
-		token = cm.getTokenAt(pos).string;
+		let token = cm.getTokenAt(pos).string;
 		if(token != "") return token //not sure why token is sometimes empty.  It should have value is tokenType returned variable
     }
 }
