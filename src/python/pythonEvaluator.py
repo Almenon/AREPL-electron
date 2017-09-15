@@ -63,7 +63,14 @@ def exec_input(codeToExec):
 
 if __name__ == '__main__':
     while True:
-        data = json.loads(input())
+        data = input()
+        try:
+            data = json.loads(data)
+        except json.JSONDecodeError as e:
+            # probably just due to user passing in stdin to program without input
+            # in which case program completes and we get the stdin, which we ignore
+            print('6q3co6' + str(e))
+            continue
         returnInfoJSON = exec_input(data['evalCode'])
         # 6q3co7 signifies to frontend that stdout is not due to a print in user's code
         print('6q3co7' + json.dumps(returnInfoJSON))
