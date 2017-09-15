@@ -25,12 +25,12 @@
     "@types/jquery": "^3.2.6",
     "concurrently": "^3.5.0",
     "devtron": "^1.4.0",
-    "electron": "^1.6.11",
     "pug-cli": "^1.0.0-alpha6"
   },
   "dependencies": {
-    "electron-updater": "^2.8.7",
+    "electron": "^1.7.6",
     "electron-context-menu": "^0.9.1",
+    "electron-updater": "^2.8.7",
     "jquery": "^3.2.1",
     "python-shell": "^0.4.0"
   }
