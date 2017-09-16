@@ -33,9 +33,6 @@ module.exports.PythonEvaluator = class{
 		// Mac and Ubuntu both have python being v2 by default
 		// archlinux and freebsd both use v3 as default, but also provide python3 command
 		this.pythonPath = process.platform != "win32" ? "python3" : "python"
-		
-		this.resultHandler = require("./pythonResultHandler")
-		this.results = this.resultHandler.results
 
 		this.startPython()
 	}
@@ -129,6 +126,8 @@ module.exports.PythonEvaluator = class{
         if(results.startsWith(identifier)){
             results = results.replace(identifier,"")
             pyResult = JSON.parse(results)
+
+			pyResult.userVariables = JSON.parse(pyResult.userVariables)
 
             if(pyResult.ERROR != ""){
                 pyResult.ERROR = this.formatPythonException(pyResult.ERROR)

@@ -22,7 +22,7 @@ module.exports.evalHandler =  class{
 		}
 			
 		if(pythonResults.userVariables != "" && pythonResults.userVariables != "{}"){
-			this.results = JSON.parse(pythonResults.userVariables);
+			this.results = pythonResults.userVariables
 			$("#results").html(jsonRenderer(this.results))
 		}
 		this.printResults = []; //clear so empty for next program run
