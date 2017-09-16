@@ -42,16 +42,16 @@ const template = [
       submenu: [
         {
             label: 'Learn More',
-            click: function() { shell.openExternal('http://electron.atom.io') }
+            click: function() { require("electron").shell.openExternal('http://electron.atom.io') }
         }
       ]
     }
 ];
 
 function adaptTemplateForMac(template){
-    // File menu
-    template[0].label = app.getName();
-    template[0].submenu.push([
+    template.unshift({
+        label: require("electron").app.getName(),
+        submenu: [
         {role: 'about'},
         {type: 'separator'},
         {role: 'services', submenu: []},
@@ -61,14 +61,13 @@ function adaptTemplateForMac(template){
         {role: 'unhide'},
         {type: 'separator'},
         {role: 'quit'}
-    ]);
+        ]
+    })
     
     // Edit menu
     template[1].submenu.push(
-    {type: 'separator'},
-    {
-        label: 'Speech',
-        submenu: [
+        {type: 'separator'},
+        {label: 'Speech', submenu: [
             {role: 'startspeaking'},
             {role: 'stopspeaking'}
         ]
@@ -94,7 +93,7 @@ function adaptTemplateForMac(template){
  */
 module.exports = function(){
     if (process.platform === 'darwin'){
-        let template = adaptTemplateForMac(template);
+        return adaptTemplateForMac(template);
     }
     return template;
 }

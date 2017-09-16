@@ -48,16 +48,22 @@ const fileMenu = {
  */
 module.exports.makeMenu = function(mainWindow){
   var template = defaultMenu();
-  
+  var helpMenuIndex = 3;
+  var fileMenuIndex = 0;
+  if(process.platform == "darwin"){
+    helpMenuIndex++;
+    fileMenuIndex++;
+  }
+
   // Help menu modfications
-  template[3].submenu = helpSubmenu;
+  template[helpMenuIndex].submenu = helpSubmenu;
 
   // File menu modificatoins
-  template.unshift(fileMenu);
-  template[0].submenu[0].click = () => {
+  template.splice(fileMenuIndex,0,fileMenu)
+  template[fileMenuIndex].submenu[0].click = () => {
     mainWindow.webContents.send('openFileMenuClick', null);
   }
-  template[0].submenu[1].click = () => {
+  template[fileMenuIndex].submenu[1].click = () => {
     mainWindow.webContents.send('saveFileMenuClick', null);
   }
 
