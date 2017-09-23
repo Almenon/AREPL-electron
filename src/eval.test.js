@@ -41,4 +41,56 @@ suite("PythonEvaluator Tests", () => {
         pyEvaluator.execCode({evalCode:"x=1"})
     })
 
+    test("PythonEvaluator can print stdout", function(done){
+        let hasPrinted = false
+        pyEvaluator.onPrint = (stdout)=>{ 
+            assert.equal(stdout, "hello world")
+            hasPrinted = true
+        }
+
+        pyEvaluator.onResult = () => {
+            if(!hasPrinted) assert.fail("program has returned result","program should still be printing")
+            else done()
+        }
+
+        pyEvaluator.execCode({evalCode:"print('hello world')"})
+    })
+
+    test("PythonEvaluator can print multiple lines", function(done){
+        let firstPrint = false
+        let secondPrint = false
+
+        pyEvaluator.onPrint = (stdout)=>{ 
+            if(firstPrint){
+                assert.equal(stdout, '2')
+                secondPrint = true
+            }
+            else{
+                assert.equal(stdout, "1")
+                firstPrint = true
+            }
+        }
+
+        pyEvaluator.onResult = () => {
+            if(!secondPrint) assert.fail("program has returned result","program should still be printing")
+            else done()
+        }
+
+        pyEvaluator.execCode({evalCode:"[print(x) for x in [1,2]]"})
+    })
+
+    test("PythonEvaluator returns result after print", function(done){
+        pyEvaluator.onPrint = (stdout)=>{ 
+            assert.equal(stdout, "hello world")
+            assert.equal(pyEvaluator.running, true)
+        }
+
+        pyEvaluator.onResult = () => {
+            assert.equal(pyEvaluator.running, false)
+            done()
+        }
+
+        pyEvaluator.execCode({evalCode:"print('hello world')"})
+    })
+
 })
