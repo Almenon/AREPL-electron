@@ -26,11 +26,6 @@ $(function(){ //reference html elements after page load
 		lineNumbers: true,
 		gutters: ["CodeMirror-linenumbers", "breakpoints"],
 		keyMap: "sublime",
-		extraKeys: {
-			"F1": restartExec,
-			"F4": toggleRealTimeEval,
-			"F5": runOnce
-		},
 		matchBrackets: true,
 	})
 	cm.on("changes",()=>{utils.delay(handleInput, 300)}) //delay 300ms to wait for user to finish typing
@@ -39,6 +34,17 @@ $(function(){ //reference html elements after page load
 	$(".CodeMirror").mousemove(handleMouseMove)
 	$("#stdin").keyup((e) => {if(e.key == "Enter") handleSTDIN()})
 })
+
+var shortcuts = {
+	"F1": restartExec,
+	"F4": toggleRealTimeEval,
+	"F5": runOnce
+}
+
+window.onkeydown = (e) => {
+	let functionToRun = shortcuts[e.key];
+	if(functionToRun != undefined) functionToRun();
+}
 
 module.exports.insertStringIntoEditor = function(content){
 	cm.setValue(content)
