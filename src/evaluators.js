@@ -92,7 +92,7 @@ module.exports.PythonEvaluator = class{
 			pythonPath: this.pythonPath,
 		})
 		this.pyshell.on('message', message => {
-			console.debug(message)
+			console.info(message)
 			this.handleResult(message)
 		})
 	}
@@ -116,22 +116,23 @@ module.exports.PythonEvaluator = class{
 	 * @param {string} results 
 	 */
 	handleResult(results) {
-		this.running = false
 		let pyResult = {
 			"ERROR":"",
 			"userVariables": ""
 		}
 
-        //if result should have identifier, otherwise it is just a printout from users code
+        //result should have identifier, otherwise it is just a printout from users code
         if(results.startsWith(identifier)){
+			this.running = false
             results = results.replace(identifier,"")
             pyResult = JSON.parse(results)
-
 			pyResult.userVariables = JSON.parse(pyResult.userVariables)
 
             if(pyResult.ERROR != ""){
                 pyResult.ERROR = this.formatPythonException(pyResult.ERROR)
-            }
+			}
+
+			this.onResult(pyResult)
 		}
 		else if(results.startsWith(jsonErrorIdentifier)){
 			results = results.replace(jsonErrorIdentifier)
@@ -139,10 +140,10 @@ module.exports.PythonEvaluator = class{
 			"User probably just sent stdin without input() in his program.\n" + results)
 		}
         else{
+			// get rid of \r at end
+			results = results.slice(0, results.length-1);
             this.onPrint(results)
         }
-
-        this.onResult(pyResult)
 	}
 
 	/**
