@@ -125,8 +125,9 @@ module.exports.PythonEvaluator = class{
         if(results.startsWith(identifier)){
 			this.running = false
             results = results.replace(identifier,"")
-            pyResult = JSON.parse(results)
-			pyResult.userVariables = JSON.parse(pyResult.userVariables)
+			pyResult = JSON.parse(results)
+			
+			if(pyResult.userVariables != "") pyResult.userVariables = JSON.parse(pyResult.userVariables)
 
             if(pyResult.ERROR != ""){
                 pyResult.ERROR = this.formatPythonException(pyResult.ERROR)
