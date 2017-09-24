@@ -3,6 +3,8 @@ import datetime
 import json
 import jsonpickle
 import traceback
+from math import isnan
+
 
 class DatetimeHandler(jsonpickle.handlers.BaseHandler):
     ### better represention of datetime, see https://github.com/jsonpickle/jsonpickle/issues/109 ###
@@ -10,10 +12,32 @@ class DatetimeHandler(jsonpickle.handlers.BaseHandler):
         x = {"date/time": str(obj)}
         return x
 
+
+class customPickler(jsonpickle.pickler.Pickler):
+    """
+    encodes float values like inf / nan as strings to follow JSON spec while keeping meaning
+    Im doing this in custom class because handlers do not fire for floats
+    """
+    inf = float('inf')
+    negativeInf = float('-inf')
+
+    def _get_flattener(self, obj):
+        if type(obj) == type(float()):
+            if obj == self.inf:
+                return lambda obj: 'Infinity'
+            if obj == self.negativeInf:
+                return lambda obj: '-Infinity'
+            if isnan(obj):
+                return lambda obj: 'NaN'
+        return super(customPickler, self)._get_flattener(obj)
+
+
+jsonpickle.pickler.Pickler = customPickler
 jsonpickle.handlers.register(datetime.date, DatetimeHandler)
 jsonpickle.handlers.register(datetime.time, DatetimeHandler)
 jsonpickle.handlers.register(datetime.datetime, DatetimeHandler)
 jsonpickle.set_encoder_options('json', ensure_ascii=False)
+jsonpickle.set_encoder_options('json', allow_nan=False) # nan is not deseriazable by javascript
 
 # copy all special vars (we want execd code to have similar locals as actual code)
 # not copying builtins cause exec adds it in
