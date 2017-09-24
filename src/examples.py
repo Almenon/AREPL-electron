@@ -297,3 +297,41 @@ plt.plot(x, y, 'k', linewidth=1.5)
 plt.axis('off')
 plt.subplots_adjust(left=0.0, right=1.0, top=1.0, bottom=0.0)
 plt.show(block=True)
+
+################################################
+#   various types
+################################################
+
+import math # doesn't show up (good, we dont want modules to show)
+a = 1
+b = 1.1
+c = float('nan')
+d = float('infinity')
+e = float('-infinity')
+f = 'é' #doesnt render properly :(
+g = {}
+h = []
+i = [[[]]]
+j = lambda x: x+1 # doesnt show up???
+def k(x):
+	return x+1
+class l():
+	def __init__(self,x):
+		self.x = x
+m = l(5)
+n = False
+with open("C:\\dev\\t.html") as f:
+  o = f
+
+################################################
+#   unsupported code (causes jsonpickle to fail)
+################################################
+
+import matplotlib.pyplot as plt
+
+# Create new Figure and an Axes which fills it.
+fig = plt.figure(figsize=(1,1))
+ax = fig.add_axes([0,0,0,1])
+
+# above can be fixed by adding numpy support to jsonpickle
+# but still need to check how jsonpickle encodes w/ numpy vs. without
