@@ -1,4 +1,5 @@
 from copy import deepcopy
+import dill
 import datetime
 import json
 import jsonpickle
@@ -45,18 +46,51 @@ jsonpickle.set_encoder_options('json', allow_nan=False) # nan is not deseriazabl
 startingLocals = {}
 specialVars = ['__doc__', '__file__', '__loader__', '__name__', '__package__', '__spec__']
 for var in specialVars:
-    startingLocals[var] = locals()[var]
 
-def exec_input(codeToExec):
+    startingLocals[var] = locals()[var]
+oldSavedLines = []
+evalLocals = {}
+savedLocals = {}
+hasExecd = False
+
+def exec_input(codeToExec, savedLines=""):
     """
     returns the jsonpickled local variables and any errors
     {userVariables: '', ERROR: ''}
     """
-    evalLocals = deepcopy(startingLocals)
+    global oldSavedLines
+    global evalLocals
+    global savedLocals
+    
     returnInfo = {
         'ERROR':"",
         'userVariables':""
     }
+
+    # "saved" code we only ever run once and save locals, vs. codeToExec which we exec as the user types
+    # although if saved code has changed we need to re-run it
+    if savedLines != oldSavedLines:
+        try:
+            savedLocals = deepcopy(startingLocals)
+            exec(savedLines, savedLocals)
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except Exception:
+            errorMsg = traceback.format_exc()
+            errorMsg = errorMsg.replace("\n", "\\n")
+            returnInfo['ERROR'] = errorMsg
+        oldSavedLines = savedLines
+
+    if savedLines != "": 
+        try:
+            evalLocals = dill.copy(savedLocals) # should catch exception here & fallback
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except Exception:
+            errorMsg = traceback.format_exc()
+            errorMsg = errorMsg.replace("\n", "\\n")
+            returnInfo['ERROR'] = "There has been a error when trying to copy variables from saved code \n\n" + errorMsg
+    else: evalLocals = deepcopy(startingLocals)
 
     try:
         exec(codeToExec, evalLocals)
@@ -95,6 +129,6 @@ if __name__ == '__main__':
             # in which case program completes and we get the stdin, which we ignore
             print('6q3co6' + str(e))
             continue
-        returnInfoJSON = exec_input(data['evalCode'])
+        returnInfoJSON = exec_input(data['evalCode'], data['savedCode'])
         # 6q3co7 signifies to frontend that stdout is not due to a print in user's code
         print('6q3co7' + json.dumps(returnInfoJSON))

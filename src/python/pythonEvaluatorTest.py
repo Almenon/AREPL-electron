@@ -24,5 +24,22 @@ z = float('-infinity')
         returnInfo = pythonEvaluator.exec_input("import json")
         assert jsonpickle.decode(returnInfo['userVariables']) == {}
 
+    def test_save(self):
+        returnInfo = pythonEvaluator.exec_input("","from random import random\nx=random()#$save")
+        randomVal = jsonpickle.decode(returnInfo['userVariables'])['x']
+        returnInfo = pythonEvaluator.exec_input("z=3","from random import random\nx=random()#$save")
+        assert jsonpickle.decode(returnInfo['userVariables'])['x'] == randomVal
+
+    def test_can_pickle_class(self):
+        code = """
+class l():
+	def __init__(self,x):
+		self.x = x  #$save"""
+        returnInfo = pythonEvaluator.exec_input("",code)
+        randomVal = jsonpickle.decode(returnInfo['userVariables'])['l']
+        returnInfo = pythonEvaluator.exec_input("z=3",code)
+        randomVal = jsonpickle.decode(returnInfo['userVariables'])['l']
+        # just wana make sure no exceptions are raised when copying locals
+
 if __name__ == '__main__':
     unittest.main()
