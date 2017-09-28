@@ -1,3 +1,11 @@
 {
-    "eslint.enable": true
+    "eslint.enable": true,
+    "python.unitTest.unittestArgs": [
+        "-v",
+        "-s",
+        ".\\src\\python",
+        "-p",
+        "*Test.py"
+    ],
+    "python.unitTest.unittestEnabled": true
 }
