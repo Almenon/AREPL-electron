@@ -1,7 +1,7 @@
 # update version & releaseDate when doing release
 # and make sure path and artifact name matches the windows artifact
 # for now you can ignore the sha, artifact, and path because i am just checking if update availible, not actually downloading
-version: 1.0.0-alpha.3
+version: 1.0.0-alpha.4
 releaseDate: '2017-08-28T19:52:36.263Z' 
 githubArtifactName: arepl-win32-x64.zip
 path: arepl win32 x64
