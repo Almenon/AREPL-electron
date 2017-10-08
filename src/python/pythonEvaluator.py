@@ -1,16 +1,9 @@
 from copy import deepcopy
-import datetime
+from customHandlers import handlers
 import json
 import jsonpickle
 import traceback
 from math import isnan
-
-
-class DatetimeHandler(jsonpickle.handlers.BaseHandler):
-    ### better represention of datetime, see https://github.com/jsonpickle/jsonpickle/issues/109 ###
-    def flatten(self, obj, data):
-        x = {"date/time": str(obj)}
-        return x
 
 
 class customPickler(jsonpickle.pickler.Pickler):
@@ -31,13 +24,11 @@ class customPickler(jsonpickle.pickler.Pickler):
                 return lambda obj: 'NaN'
         return super(customPickler, self)._get_flattener(obj)
 
-
 jsonpickle.pickler.Pickler = customPickler
-jsonpickle.handlers.register(datetime.date, DatetimeHandler)
-jsonpickle.handlers.register(datetime.time, DatetimeHandler)
-jsonpickle.handlers.register(datetime.datetime, DatetimeHandler)
 jsonpickle.set_encoder_options('json', ensure_ascii=False)
 jsonpickle.set_encoder_options('json', allow_nan=False) # nan is not deseriazable by javascript
+for handler in handlers:
+    jsonpickle.handlers.register(handler['type'], handler['handler'])
 
 # copy all special vars (we want execd code to have similar locals as actual code)
 # not copying builtins cause exec adds it in

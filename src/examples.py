@@ -324,6 +324,26 @@ with open("C:\\dev\\t.html") as f:
   o = f
 
 ################################################
+#   REGEX
+################################################
+
+import re
+
+print(dir(re))
+
+pattern = re.compile("(d)(?P<yo>o)f(g)")
+
+search = pattern.search("ffdofg")
+match = pattern.match("dofg")
+findAll = pattern.findall("dofg dofg")
+sub = pattern.sub('g','dofgoo')
+split = pattern.split("h dofg g")
+noMatch = pattern.search('a')
+
+groups = search.groupdict()
+span = search.span()
+
+################################################
 #   unsupported code (causes jsonpickle to fail)
 ################################################
 
