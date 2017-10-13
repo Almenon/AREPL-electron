@@ -5,6 +5,7 @@ import json
 import jsonpickle
 import traceback
 from math import isnan
+import ast
 
 
 class DatetimeHandler(jsonpickle.handlers.BaseHandler):
@@ -53,6 +54,25 @@ evalLocals = {}
 savedLocals = {}
 hasExecd = False
 
+def get_imports(parsedText, text):
+    """
+    :param parsedText: the result of ast.parse(text)
+    :returns: empty string if no imports, otherwise string containing all imports
+    """
+
+    child_nodes = [l for l in ast.iter_child_nodes(parsedText)]
+
+    imports = []
+    savedCode = text.split('\n')
+    for node in child_nodes:
+        if(isinstance(node, ast.Import) or isinstance(node, ast.ImportFrom)):
+            importLine = savedCode[node.lineno-1]
+            imports.append(importLine)
+
+    imports = '\n'.join(imports)
+    return imports
+
+
 def exec_input(codeToExec, savedLines=""):
     """
     returns the jsonpickled local variables and any errors
@@ -71,8 +91,13 @@ def exec_input(codeToExec, savedLines=""):
     # although if saved code has changed we need to re-run it
     if savedLines != oldSavedLines:
         try:
+
             savedLocals = deepcopy(startingLocals)
             exec(savedLines, savedLocals)
+            
+            # dill.copy cant handle imported modules, so remove them
+            savedLocals = {k:v for k,v in savedLocals.items() if str(type(v)) != "<class 'module'>"}
+
         except (KeyboardInterrupt, SystemExit):
             raise
         except Exception:
@@ -91,6 +116,18 @@ def exec_input(codeToExec, savedLines=""):
             errorMsg = errorMsg.replace("\n", "\\n")
             returnInfo['ERROR'] = "There has been a error when trying to copy variables from saved code \n\n" + errorMsg
     else: evalLocals = deepcopy(startingLocals)
+
+    try:
+        savedCodeAST = ast.parse(savedLines)
+    except SyntaxError:
+        errorMsg = traceback.format_exc()
+        errorMsg = errorMsg.replace("\n", "\\n")
+        returnInfo['ERROR'] = errorMsg
+        return returnInfo
+
+    # we need to do imports each time since savedCode does not support imports
+    imports = get_imports(savedCodeAST, savedLines)
+    codeToExec = imports + '\n' + codeToExec
 
     try:
         exec(codeToExec, evalLocals)
