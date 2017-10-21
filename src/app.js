@@ -134,6 +134,7 @@ function handleGutterClick(cm, lineNum) {
  * @param {string[]} codeLines 
  */
 function evalCode(codeLines){
+	let savedLines = [];
 
 	if( codeLines.length == 0 || codeLines.length == 1 && codeLines[0].trim().length == 0) return
 
@@ -148,7 +149,16 @@ function evalCode(codeLines){
 		return
 	}
 
+	// split code into saved and unsaved part
+	codeLines.forEach((line,i)=>{
+		if(line.endsWith('#$save')){
+			savedLines = codeLines.slice(0,i+1)
+			codeLines = codeLines.slice(i+1,codeLines.length)
+		}
+	});
+
 	let data = {
+		savedCode: savedLines.join('\n'),
 		evalCode: codeLines.join('\n')
 	}
 	
