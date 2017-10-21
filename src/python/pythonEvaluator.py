@@ -34,6 +34,9 @@ class customPickler(jsonpickle.pickler.Pickler):
         return super(customPickler, self)._get_flattener(obj)
 
 
+class UserError(Exception):
+    pass
+
 jsonpickle.pickler.Pickler = customPickler
 jsonpickle.handlers.register(datetime.date, DatetimeHandler)
 jsonpickle.handlers.register(datetime.time, DatetimeHandler)
@@ -47,12 +50,13 @@ jsonpickle.set_encoder_options('json', allow_nan=False) # nan is not deseriazabl
 startingLocals = {}
 specialVars = ['__doc__', '__file__', '__loader__', '__name__', '__package__', '__spec__']
 for var in specialVars:
-
     startingLocals[var] = locals()[var]
+    
 oldSavedLines = []
 evalLocals = {}
 savedLocals = {}
 hasExecd = False
+
 
 def get_imports(parsedText, text):
     """
@@ -73,70 +77,74 @@ def get_imports(parsedText, text):
     return imports
 
 
+def exec_saved(savedLines):
+    savedLocals = deepcopy(startingLocals)
+    try:
+        exec(savedLines, savedLocals)
+    except Exception:
+        errorMsg = traceback.format_exc()        
+        raise UserError(errorMsg)
+    
+    # dill.copy cant handle imported modules, so remove them
+    savedLocals = {k:v for k,v in savedLocals.items() if str(type(v)) != "<class 'module'>"}
+
+    return savedLocals
+
+
+def get_eval_locals_from_saved(savedLines):
+    global oldSavedLines
+    global savedLocals
+
+    # "saved" code we only ever run once and save locals, vs. codeToExec which we exec as the user types
+    # although if saved code has changed we need to re-run it
+    if savedLines != oldSavedLines:
+        savedLocals = exec_saved(savedLines)
+        oldSavedLines = savedLines
+
+    if savedLines != "":
+        return dill.copy(savedLocals)
+    else: 
+        return deepcopy(startingLocals)    
+
+
+def copy_saved_imports_to_exec(codeToExec, savedLines):
+    """
+    copies imports in savedLines to the top of codeToExec
+    :raises: SyntaxError if err in savedLines
+    """
+    try:
+        savedCodeAST = ast.parse(savedLines)
+    except SyntaxError:
+        errorMsg = traceback.format_exc()        
+        raise UserError(errorMsg)
+
+    imports = get_imports(savedCodeAST, savedLines)
+    codeToExec = imports + '\n' + codeToExec
+    return codeToExec
+
+
 def exec_input(codeToExec, savedLines=""):
     """
     returns the jsonpickled local variables and any errors
-    {userVariables: '', ERROR: ''}
+    :returns: {userVariables: '', ERROR: ''}
     """
-    global oldSavedLines
-    global evalLocals
-    global savedLocals
     
     returnInfo = {
         'ERROR':"",
         'userVariables':""
     }
 
-    # "saved" code we only ever run once and save locals, vs. codeToExec which we exec as the user types
-    # although if saved code has changed we need to re-run it
-    if savedLines != oldSavedLines:
-        try:
+    evalLocals = get_eval_locals_from_saved(savedLines)
 
-            savedLocals = deepcopy(startingLocals)
-            exec(savedLines, savedLocals)
-            
-            # dill.copy cant handle imported modules, so remove them
-            savedLocals = {k:v for k,v in savedLocals.items() if str(type(v)) != "<class 'module'>"}
-
-        except (KeyboardInterrupt, SystemExit):
-            raise
-        except Exception:
-            errorMsg = traceback.format_exc()
-            errorMsg = errorMsg.replace("\n", "\\n")
-            returnInfo['ERROR'] = errorMsg
-        oldSavedLines = savedLines
-
-    if savedLines != "": 
-        try:
-            evalLocals = dill.copy(savedLocals) # should catch exception here & fallback
-        except (KeyboardInterrupt, SystemExit):
-            raise
-        except Exception:
-            errorMsg = traceback.format_exc()
-            errorMsg = errorMsg.replace("\n", "\\n")
-            returnInfo['ERROR'] = "There has been a error when trying to copy variables from saved code \n\n" + errorMsg
-    else: evalLocals = deepcopy(startingLocals)
-
-    try:
-        savedCodeAST = ast.parse(savedLines)
-    except SyntaxError:
-        errorMsg = traceback.format_exc()
-        errorMsg = errorMsg.replace("\n", "\\n")
-        returnInfo['ERROR'] = errorMsg
-        return returnInfo
-
-    # we need to do imports each time since savedCode does not support imports
-    imports = get_imports(savedCodeAST, savedLines)
-    codeToExec = imports + '\n' + codeToExec
+    # re-import imports. (pickling imports from saved code was unfortunately not possible)
+    codeToExec = copy_saved_imports_to_exec(codeToExec, savedLines)
 
     try:
         exec(codeToExec, evalLocals)
-    except (KeyboardInterrupt, SystemExit):
-        raise
     except Exception:
-        errorMsg = traceback.format_exc()
-        errorMsg = errorMsg.replace("\n", "\\n")
-        returnInfo['ERROR'] = errorMsg
+        errorMsg = traceback.format_exc()        
+        raise UserError(errorMsg)
+
 
     # filter out non-user vars, no point in showing them
     userVariables = {k:v for k,v in evalLocals.items() if str(type(v)) != "<class 'module'>"
@@ -144,28 +152,36 @@ def exec_input(codeToExec, savedLines=""):
 
     # json dumps cant handle any object type, so we need to use jsonpickle
     # still has limitations but can handle much more
-    try:
-        returnInfo['userVariables'] = jsonpickle.encode(userVariables, max_depth=100) # any depth above 245 resuls in error and anything above 100 takes too long to process
-    except (KeyboardInterrupt, SystemExit):
-        raise
-    except Exception:
-        errorMsg = traceback.format_exc()
-        errorMsg = errorMsg.replace("\n", "\\n")
-        returnInfo['ERROR'] = "There has been a error when trying to display your variables. Sorry :( \n\n" + errorMsg
+    returnInfo['userVariables'] = jsonpickle.encode(userVariables, max_depth=100) # any depth above 245 resuls in error and anything above 100 takes too long to process
 
     return returnInfo
 
 
 if __name__ == '__main__':
+
     while True:
-        data = input()
+        
         try:
-            data = json.loads(data)
+            data = json.loads(input())
         except json.JSONDecodeError as e:
             # probably just due to user passing in stdin to program without input
             # in which case program completes and we get the stdin, which we ignore
             print('6q3co6' + str(e))
             continue
-        returnInfoJSON = exec_input(data['evalCode'], data['savedCode'])
+
+        returnInfoJSON = {'ERROR':"",'userVariables': "{}"}
+
+        try:
+            returnInfoJSON = exec_input(data['evalCode'], data['savedCode'])
+        except (KeyboardInterrupt, SystemExit):
+            raise
+        except UserError as e:
+            errorMsg = str(e).replace("\n", "\\n")
+            returnInfoJSON['ERROR'] = errorMsg            
+        except Exception:
+            errorMsg = traceback.format_exc()
+            errorMsg = errorMsg.replace("\n", "\\n")
+            returnInfoJSON['ERROR'] = "Sorry, AREPL has ran into an error\\n\\n" + errorMsg
+
         # 6q3co7 signifies to frontend that stdout is not due to a print in user's code
         print('6q3co7' + json.dumps(returnInfoJSON))
