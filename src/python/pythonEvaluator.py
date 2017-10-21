@@ -112,14 +112,21 @@ def copy_saved_imports_to_exec(codeToExec, savedLines):
     copies imports in savedLines to the top of codeToExec
     :raises: SyntaxError if err in savedLines
     """
-    try:
-        savedCodeAST = ast.parse(savedLines)
-    except SyntaxError:
-        errorMsg = traceback.format_exc()        
-        raise UserError(errorMsg)
+    if savedLines.strip() != "":
+        try:
+            savedCodeAST = ast.parse(savedLines)
+        except SyntaxError:
+            errorMsg = traceback.format_exc()        
+            raise UserError(errorMsg)
 
-    imports = get_imports(savedCodeAST, savedLines)
-    codeToExec = imports + '\n' + codeToExec
+        imports = get_imports(savedCodeAST, savedLines)
+        codeToExec = imports + '\n' + codeToExec
+
+        # to make sure line # in errors is right we need to pad codeToExec with newlines
+        numLinesToAdd = len(savedLines.split('\n')) - len(imports.split('\n'))
+        for i in range(numLinesToAdd):
+            codeToExec = '\n' + codeToExec
+
     return codeToExec
 
 
