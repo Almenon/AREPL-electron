@@ -13,6 +13,9 @@ module.exports.evalHandler =  class{
 	}
 
 	handleResult(pythonResults){
+		console.log(pythonResults.time)
+		console.log(pythonResults.totalTime)
+
 		if(pythonResults.ERROR != ""){
 			$("#error").text("⚠ " + pythonResults.ERROR);
 			$("#error").show("fast");

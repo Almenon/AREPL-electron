@@ -5,7 +5,7 @@ import jsonpickle
 import traceback
 from math import isnan
 import ast
-
+from time import time
 
 class customPickler(jsonpickle.pickler.Pickler):
     """
@@ -126,7 +126,8 @@ def exec_input(codeToExec, savedLines=""):
     
     returnInfo = {
         'ERROR':"",
-        'userVariables':""
+        'userVariables':"",
+        'time':0
     }
 
     evalLocals = get_eval_locals_from_saved(savedLines)
@@ -135,7 +136,9 @@ def exec_input(codeToExec, savedLines=""):
     codeToExec = copy_saved_imports_to_exec(codeToExec, savedLines)
 
     try:
+        start = time()
         exec(codeToExec, evalLocals)
+        returnInfo['time'] = time()-start
     except Exception:
         errorMsg = traceback.format_exc()        
         raise UserError(errorMsg)
@@ -164,7 +167,7 @@ if __name__ == '__main__':
             print('6q3co6' + str(e))
             continue
 
-        returnInfoJSON = {'ERROR':"",'userVariables': "{}"}
+        returnInfoJSON = {'ERROR':"",'userVariables': "{}", 'time':0}
 
         try:
             returnInfoJSON = exec_input(data['evalCode'], data['savedCode'])

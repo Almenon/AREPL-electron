@@ -45,6 +45,7 @@ module.exports.PythonEvaluator = class{
 	execCode(code){
 		if(this.running) return
 		this.running = true
+		this.startTime = Date.now()
 		this.pyshell.send(JSON.stringify(code))
 	}
 
@@ -118,7 +119,8 @@ module.exports.PythonEvaluator = class{
 	handleResult(results) {
 		let pyResult = {
 			"ERROR":"",
-			"userVariables": ""
+			"userVariables": "",
+			"time":0
 		}
 
         //result should have identifier, otherwise it is just a printout from users code
@@ -127,12 +129,15 @@ module.exports.PythonEvaluator = class{
             results = results.replace(identifier,"")
 			pyResult = JSON.parse(results)
 			
+			pyResult.time = pyResult.time*1000 // convert into ms
+			
 			if(pyResult.userVariables != "") pyResult.userVariables = JSON.parse(pyResult.userVariables)
 
             if(pyResult.ERROR != ""){
                 pyResult.ERROR = this.formatPythonException(pyResult.ERROR)
 			}
 
+			pyResult.totalTime = Date.now()-this.startTime
 			this.onResult(pyResult)
 		}
 		else if(results.startsWith(jsonErrorIdentifier)){
@@ -144,7 +149,7 @@ module.exports.PythonEvaluator = class{
 			// get rid of \r at end
 			results = results.slice(0, results.length-1);
             this.onPrint(results)
-        }
+		}
 	}
 
 	/**
