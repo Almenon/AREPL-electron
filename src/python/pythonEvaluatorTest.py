@@ -34,6 +34,10 @@ z = float('-infinity')
         returnInfo = pythonEvaluator.exec_input("z=math.sin(0)","import math#$save")
         assert jsonpickle.decode(returnInfo['userVariables'])['z'] == 0
 
+    def test_has_error(self):
+        with self.assertRaises(pythonEvaluator.UserError):
+            returnInfo = pythonEvaluator.exec_input("x")
+
 #   class pickling does work - but not when unit testing for some reason
 #   "Can't pickle <class 'pythonEvaluator.l'>: it's not found as pythonEvaluator.l"
 #   not sure why it's trying to find the class in pythonEvaluator - it's not going to be there
