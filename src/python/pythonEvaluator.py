@@ -1,5 +1,4 @@
 from copy import deepcopy
-import dill
 from customHandlers import handlers
 import json
 import jsonpickle
@@ -74,7 +73,7 @@ def exec_saved(savedLines):
         errorMsg = traceback.format_exc()        
         raise UserError(errorMsg)
     
-    # dill.copy cant handle imported modules, so remove them
+    # deepcopy cant handle imported modules, so remove them
     savedLocals = {k:v for k,v in savedLocals.items() if str(type(v)) != "<class 'module'>"}
 
     return savedLocals
@@ -91,7 +90,7 @@ def get_eval_locals_from_saved(savedLines):
         oldSavedLines = savedLines
 
     if savedLines != "":
-        return dill.copy(savedLocals)
+        return deepcopy(savedLocals)
     else: 
         return deepcopy(startingLocals)    
 
