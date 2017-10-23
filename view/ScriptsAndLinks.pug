@@ -1,6 +1,7 @@
 block ScriptsAndLinks
   script(src='node_modules/jquery/dist/jquery.min.js')
-  script(type='text/javascript', src='libraries/renderjson.js')
+  script(src='libraries/jquery-ui-1.12.1.custom/jquery-ui.min.js')
+  script(src='libraries/renderjson.js')
   
   script(src='libraries/codemirror/lib/codemirror.js')
   script(src='libraries/codemirror/mode/python/python.js')
@@ -13,6 +14,7 @@ block ScriptsAndLinks
   script(src='libraries/codemirror/addon/search/matchesonscrollbar.js')
   script(src='libraries/codemirror/addon/scroll/annotatescrollbar.js') // required by matchesonscrollbar.js
 
+  link(rel='stylesheet', href='libraries/jquery-ui-1.12.1.custom/jquery-ui.min.css')
   link(rel='stylesheet', href='libraries/codemirror/lib/codemirror.css')
   link(rel='stylesheet', href='libraries/codemirror/addon/dialog/dialog.css')
   link(rel='stylesheet', href='libraries/codemirror/addon/search/matchesonscrollbar.css')

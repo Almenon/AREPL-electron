@@ -33,6 +33,19 @@ $(function(){ //reference html elements after page load
 	
 	$(".CodeMirror").mousemove(handleMouseMove)
 	$("#stdin").keyup((e) => {if(e.key == "Enter") handleSTDIN()})
+
+	$('.CodeMirror').resizable({
+		handles: 'e,s,se', // right, bottom, and bottom-right corner
+		resize: function(event, ui) {
+			let errorPadding = parseInt($('#error').css('padding'))*2
+
+			cm.setSize(ui.size.width, ui.size.height);
+			$('#stdin').width(ui.size.width);
+			$('#error').width(ui.size.width-errorPadding);
+			$('#stdout').width(ui.size.width);
+			$('#leftContainer').width(ui.size.width);
+		  },
+	});
 })
 
 var shortcuts = {
