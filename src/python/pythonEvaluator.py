@@ -27,7 +27,14 @@ class customPickler(jsonpickle.pickler.Pickler):
 
 
 class UserError(Exception):
-    pass
+    """
+    user errors should be caught and re-thrown with this
+    Be warned that this exception can throw an exception.  Yes, you read that right.  I apolagize in advance.
+    :raises: ValueError (varsSoFar gets pickled into JSON, which may result in any number of errors depending on what types are inside)
+    """
+    def __init__(self, message, varsSoFar={}):
+        super().__init__(message)
+        self.varsSoFar = pickle_user_vars(varsSoFar)
 
 jsonpickle.pickler.Pickler = customPickler
 jsonpickle.set_encoder_options('json', ensure_ascii=False)
@@ -71,7 +78,7 @@ def exec_saved(savedLines):
         exec(savedLines, savedLocals)
     except Exception:
         errorMsg = traceback.format_exc()        
-        raise UserError(errorMsg)
+        raise UserError(errorMsg, savedLocals)
     
     # deepcopy cant handle imported modules, so remove them
     savedLocals = {k:v for k,v in savedLocals.items() if str(type(v)) != "<class 'module'>"}
@@ -94,6 +101,15 @@ def get_eval_locals_from_saved(savedLines):
     else: 
         return deepcopy(startingLocals)    
 
+def pickle_user_vars(userVars):
+    # filter out non-user vars, no point in showing them
+    userVariables = {k:v for k,v in userVars.items() if str(type(v)) != "<class 'module'>"
+                     and k not in specialVars+['__builtins__']}
+
+    # json dumps cant handle any object type, so we need to use jsonpickle
+    # still has limitations but can handle much more
+    return jsonpickle.encode(userVariables, max_depth=100) # any depth above 245 resuls in error and anything above 100 takes too long to process
+    
 
 def copy_saved_imports_to_exec(codeToExec, savedLines):
     """
@@ -141,16 +157,9 @@ def exec_input(codeToExec, savedLines=""):
         returnInfo['time'] = time()-start
     except Exception:
         errorMsg = traceback.format_exc()        
-        raise UserError(errorMsg)
+        raise UserError(errorMsg, evalLocals)
 
-
-    # filter out non-user vars, no point in showing them
-    userVariables = {k:v for k,v in evalLocals.items() if str(type(v)) != "<class 'module'>"
-                     and k not in specialVars+['__builtins__']}
-
-    # json dumps cant handle any object type, so we need to use jsonpickle
-    # still has limitations but can handle much more
-    returnInfo['userVariables'] = jsonpickle.encode(userVariables, max_depth=100) # any depth above 245 resuls in error and anything above 100 takes too long to process
+    returnInfo['userVariables'] = pickle_user_vars(evalLocals)
 
     return returnInfo
 
@@ -175,7 +184,8 @@ if __name__ == '__main__':
             raise
         except UserError as e:
             errorMsg = str(e).replace("\n", "\\n")
-            returnInfoJSON['ERROR'] = errorMsg            
+            returnInfoJSON['ERROR'] = errorMsg
+            returnInfoJSON['userVariables'] = e.varsSoFar
         except Exception:
             errorMsg = traceback.format_exc()
             errorMsg = errorMsg.replace("\n", "\\n")
