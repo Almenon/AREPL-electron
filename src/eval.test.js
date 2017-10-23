@@ -38,7 +38,7 @@ suite("PythonEvaluator Tests", () => {
             assert.equal(result.userVariables['x'], 1)
             done()
         }
-        pyEvaluator.execCode({evalCode:"x=1"})
+        pyEvaluator.execCode({evalCode:"x=1", savedCode: ""})
     })
 
     test("PythonEvaluator can print stdout", function(done){
@@ -53,7 +53,7 @@ suite("PythonEvaluator Tests", () => {
             else done()
         }
 
-        pyEvaluator.execCode({evalCode:"print('hello world')"})
+        pyEvaluator.execCode({evalCode:"print('hello world')", savedCode: ""})
     })
 
     test("PythonEvaluator can print multiple lines", function(done){
@@ -76,7 +76,7 @@ suite("PythonEvaluator Tests", () => {
             else done()
         }
 
-        pyEvaluator.execCode({evalCode:"[print(x) for x in [1,2]]"})
+        pyEvaluator.execCode({evalCode:"[print(x) for x in [1,2]]", savedCode: ""})
     })
 
     test("PythonEvaluator returns result after print", function(done){
