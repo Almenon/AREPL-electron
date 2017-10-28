@@ -1,4 +1,5 @@
 # this script based off of https://github.com/tolbertam/mocha-appveyor-reporter/blob/master/appveyor.yml
+# python settings based off of https://github.com/ogrisel/python-appveyor-demo/blob/master/appveyor.yml
 
 environment:
   matrix:
@@ -11,6 +12,15 @@ install:
   # Get the latest stable version of Node.js
   - ps: Install-Product node ''
   - npm install
+
+  # Install Python (from the official .msi of http://python.org) and pip when
+  # not already installed.
+  - ps: if (-not(Test-Path($env:PYTHON))) { & appveyor\install.ps1 }
+
+  # Prepend newly installed Python to the PATH of this build (this cannot be
+  # done from inside the powershell script as it would require to restart
+  # the parent CMD process).
+  - "SET PATH=%PYTHON%;%PYTHON%\\Scripts;%PATH%"
 
 build: off
 
