@@ -24,8 +24,8 @@
   "author": "Almenon",
   "devDependencies": {
     "@types/codemirror": "0.0.41",
-    "@types/jquery": "^3.2.6",
-    "@types/mocha": "^2.2.32",
+    "@types/jquery": "^3.2.15",
+    "@types/mocha": "^2.2.44",
     "concurrently": "^3.5.0",
     "devtron": "^1.4.0",
     "mocha": "^3.5.3",
@@ -33,9 +33,9 @@
     "pug-cli": "^1.0.0-alpha6"
   },
   "dependencies": {
-    "electron": "^1.7.6",
+    "electron": "^1.8.1",
     "electron-context-menu": "^0.9.1",
-    "electron-updater": "^2.8.7",
+    "electron-updater": "^2.15.1",
     "jquery": "^3.2.1",
     "python-shell": "^0.4.0"
   }
