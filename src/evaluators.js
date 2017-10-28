@@ -149,8 +149,8 @@ module.exports.PythonEvaluator = class{
 			"User probably just sent stdin without input() in his program.\n" + results)
 		}
         else{
-			// get rid of \r at end
-			results = results.slice(0, results.length-1);
+			// get rid of \r at end (present in windows)
+			if(results.endsWith('\r')) results = results.slice(0, results.length-1);
             this.onPrint(results)
 		}
 	}
