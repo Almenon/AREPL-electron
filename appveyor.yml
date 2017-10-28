@@ -25,7 +25,7 @@ install:
 build: off
 
 test_script:
-  - npm test
+  - npm appveyorTest
 
 cache:
   - node_modules -> package.json

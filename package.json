@@ -10,7 +10,8 @@
     "releaseBuildWin": "electron-packager . --overwrite",
     "releaseBuildMac": "electron-packager . --overwrite --platform=darwin",
     "releaseBuildLinux": "electron-packager . --overwrite --platform=linux",
-    "test": "mocha --ui tdd src/*.test.js"
+    "test": "mocha --ui tdd src/*.test.js",
+    "appveyorTest": "mocha --ui tdd --reporter mocha-appveyor-reporter src/*.test.js & exit 0"
   },
   "repository": "https://github.com/Almenon/AREPL",
   "keywords": [
@@ -24,11 +25,12 @@
   "devDependencies": {
     "@types/codemirror": "0.0.41",
     "@types/jquery": "^3.2.6",
+    "@types/mocha": "^2.2.32",
     "concurrently": "^3.5.0",
     "devtron": "^1.4.0",
-    "pug-cli": "^1.0.0-alpha6",
     "mocha": "^3.5.3",
-    "@types/mocha": "^2.2.32"
+    "mocha-appveyor-reporter": "^0.4.0",
+    "pug-cli": "^1.0.0-alpha6"
   },
   "dependencies": {
     "electron": "^1.7.6",
