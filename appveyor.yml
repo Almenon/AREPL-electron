@@ -35,3 +35,10 @@ notifications:
     to:
       - almenon214@gmail.com
     on_build_success: false
+    
+skip_commits:
+  files:
+    - '**/*.html'
+    - '**/*.pug'
+    - '**/*.css'
+    - '**/*.md'
