@@ -61,17 +61,22 @@ function createWindow () {
     title: 'AREPL ' + app.getVersion()
   })
 
-  let indexHtmlPath = process.cwd();
-  if(indexHtmlPath.endsWith("arepl-win32-x64")){ //production build
-    indexHtmlPath = indexHtmlPath + '/resources/app/view/index.html';
+  let indexPath = "/view/index.html"
+  let fullIndexPath = process.cwd()
+  if(fullIndexPath.endsWith("arepl-win32")){ //production build
+    fullIndexPath = fullIndexPath + '/resources/app' + indexPath
+  }
+  else if(__dirname.includes("arepl-darwin")){ //mac prod build
+    fullIndexPath = __dirname // "/Users/anon/Documents/AREPL/arepl-darwin-x64/arepl.app/Contents/Resources/app/src/electron"
+    fullIndexPath = fullIndexPath.replace("src/electron",indexPath)
   }
   else{
-    indexHtmlPath = indexHtmlPath + '/view/index.html';
+    fullIndexPath = fullIndexPath + indexPath
   }
 
   // and load the index.html of the app.
   mainWindow.loadURL(url.format({
-    pathname: indexHtmlPath,
+    pathname: fullIndexPath,
     protocol: 'file:',
     slashes: true
   }));

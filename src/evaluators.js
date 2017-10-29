@@ -26,6 +26,9 @@ module.exports.PythonEvaluator = class{
 		if(rootPath.endsWith("arepl-win32-x64")){
 		  rootPath = rootPath + '/resources/app'
 		}
+		else if(__dirname.includes("arepl-darwin")){ //mac prod build
+			rootPath = __dirname.replace("/view","")
+		}
 
 		this.pythonEvalFolderPath = rootPath + '/src/python/'
 
