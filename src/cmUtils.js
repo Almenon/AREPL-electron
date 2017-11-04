@@ -18,3 +18,24 @@ module.exports.getVariable = function(cm, event){
 		if(token != "") return token //not sure why token is sometimes empty.  It should have value is tokenType returned variable
     }
 }
+
+/**
+ * returns cm contents with current line replaced by newLine.  actual contents remains unchanged.
+ * @param {string} newLine 
+ * @returns {string}
+ */
+module.exports.replaceCurrentLine = (cm, newLine) => {
+	let codeLines = cm.getValue().split('\n')
+	let currentLine = cm.getCursor().line
+	codeLines[currentLine] = newLine
+	return codeLines.join('\n')	
+}
+
+/**
+ * @returns {string}
+ */
+module.exports.getCurrentLine = (cm) => {
+	let codeLines = cm.getValue().split('\n')
+	let currentLine = cm.getCursor().line
+	return codeLines[currentLine]	
+}

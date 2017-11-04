@@ -30,3 +30,16 @@ module.exports.delay = (function(){
     timer = setTimeout(callback, ms);
   };
 })();
+
+/**
+ * line -> func(line)
+ * OR line -> func1(func2(line)) ...
+ * @param {string} line 
+ * @param {string|string[]} func
+ * @returns {string}
+ */
+function wrapLineWithFunc(line, func){
+	if(typeof func == "string" || func.length == 1) return func + '(' + line + ')'
+	else return wrapLineWithFunc(func[func.length-1] + '(' + line + ')', func.slice(0,func.length-1))
+}
+module.exports.wrapLineWithFunc = wrapLineWithFunc

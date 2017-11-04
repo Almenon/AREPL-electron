@@ -27,6 +27,27 @@ $(function(){ //reference html elements after page load
 		gutters: ["CodeMirror-linenumbers", "breakpoints"],
 		keyMap: "sublime",
 		matchBrackets: true,
+		extraKeys: {
+			"Ctrl-Enter": ()=>{
+				// todo: flash a highlight for line that is printed
+				// https://codemirror.net/demo/markselection.html
+				// tho might be simpler to implement myself
+				// codeMirrorEditor.setLineClass(actualLineNumber, 'background', 'printed');
+
+				let currentLine = cmUtils.getCurrentLine(cm)
+
+				if(currentLine.endsWith('.')){
+					currentLine = currentLine.slice(0,-1) //get rid of . to avoid syntax err
+					currentLine = utils.wrapLineWithFunc(currentLine, ["print", "dir"])
+				}
+				else{
+					currentLine = utils.wrapLineWithFunc(currentLine, "print")
+				}
+				
+				let codeLines = cmUtils.replaceCurrentLine(cm, currentLine)
+				evalCode(codeLines)
+			},
+		}
 	})
 	cm.on("changes",()=>{utils.delay(handleInput, 300)}) //delay 300ms to wait for user to finish typing
 	cm.on('gutterClick', handleGutterClick)
@@ -78,21 +99,16 @@ function restartExec(){
  */
 function handleInput(){
 	if(!realTimeEvalEnabled) return
-	var text = cm.getValue().split('\n')
-	evalCode(text)
+	evalCode(cm.getValue())
 }
 
 function runOnce(){
-	if(realTimeEvalEnabled) return //no point in running once if realTimeEval is enabled
-
-	var text = cm.getValue().split('\n')
-	evalCode(text)
+	evalCode(cm.getValue())
 }
 
 function handleSTDIN(){
 	if(!PythonEvaluator.running){
-		var text = cm.getValue().split('\n')
-		evalCode(text)
+		evalCode(cm.getValue())
 	}
 	var text = $("#stdin").val()
 	$("#stdin").val("")
@@ -144,9 +160,10 @@ function handleGutterClick(cm, lineNum) {
 }
 
 /**
- * @param {string[]} codeLines 
+ * @param {string} codeLines 
  */
 function evalCode(codeLines){
+	codeLines = codeLines.split('\n')
 	let savedLines = [];
 
 	if( codeLines.length == 0 || codeLines.length == 1 && codeLines[0].trim().length == 0) return
