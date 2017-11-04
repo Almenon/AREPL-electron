@@ -11,6 +11,29 @@ z = [x*x for char in y]
 zy = json.dumps(z)
 
 ##############################################
+#                RANDOM STUFF
+##############################################
+
+def stair_case(c):
+  print(c)
+  if len(c) < 100:
+  	return stair_case("o" + c)
+  else: return c
+  
+# can you adjust stair case to show a pyramid?
+  
+def line(start, length):
+  # find middle
+  print(start)
+  if len(start) > length:
+   return start
+  else:
+    # play around with multiplier to adjust angle!
+    return line(" "*2 + start, length)
+
+line("a",50)
+
+##############################################
 #                SIMPLE CLASS
 ##############################################
 
