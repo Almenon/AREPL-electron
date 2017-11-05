@@ -2,7 +2,7 @@
 
 [install here](https://github.com/Almenon/AREPL/releases) | see it in action below:
 
-![Alt Text](https://puu.sh/x1a1U/1fdfd3899c.gif)
+![Alt Text](https://raw.githubusercontent.com/Almenon/AREPL/master/arepl%20demo.gif)
 
 ### Features:
 * Real-time evaluation of code
