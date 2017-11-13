@@ -4,6 +4,7 @@ var utils = require("./utils")
 var evals = require("./evaluators")
 var cmUtils = require("./cmUtils")
 var evalHandler = require("./pythonResultHandler")
+var printDir = require("./printDir")
 
 var cm //codemirror
 var stopAtLine = -1
@@ -29,24 +30,9 @@ $(function(){ //reference html elements after page load
 		matchBrackets: true,
 		extraKeys: {
 			"Ctrl-Enter": ()=>{
-				// todo: flash a highlight for line that is printed
-				// https://codemirror.net/demo/markselection.html
-				// tho might be simpler to implement myself
-				// codeMirrorEditor.setLineClass(actualLineNumber, 'background', 'printed');
-
-				let currentLine = cmUtils.getCurrentLine(cm)
-
-				if(currentLine.endsWith('.')){
-					currentLine = currentLine.slice(0,-1) //get rid of . to avoid syntax err
-					currentLine = utils.wrapLineWithFunc(currentLine, ["print", "dir"])
-				}
-				else{
-					currentLine = utils.wrapLineWithFunc(currentLine, "print")
-				}
-				
-				let codeLines = cmUtils.replaceCurrentLine(cm, currentLine)
+				let codeLines = printDir.printDir(cm.getValue(), cm.getCursor().line)
 				evalCode(codeLines)
-			},
+			}
 		}
 	})
 	cm.on("changes",()=>{utils.delay(handleInput, 300)}) //delay 300ms to wait for user to finish typing
@@ -79,7 +65,6 @@ window.onkeydown = (e) => {
 	let functionToRun = shortcuts[e.key];
 	if(functionToRun != undefined) functionToRun();
 }
-
 module.exports.insertStringIntoEditor = function(content){
 	cm.setValue(content)
 }
