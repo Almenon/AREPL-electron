@@ -143,7 +143,7 @@ def exec_input(codeToExec, savedLines=""):
     returnInfo = {
         'ERROR':"",
         'userVariables':"",
-        'time':0
+        'execTime':0
     }
 
     evalLocals = get_eval_locals_from_saved(savedLines)
@@ -154,7 +154,7 @@ def exec_input(codeToExec, savedLines=""):
     try:
         start = time()
         exec(codeToExec, evalLocals)
-        returnInfo['time'] = time()-start
+        returnInfo['execTime'] = time()-start
     except Exception:
         errorMsg = traceback.format_exc()        
         raise UserError(errorMsg, evalLocals)
@@ -176,7 +176,8 @@ if __name__ == '__main__':
             print('6q3co6' + str(e))
             continue
 
-        returnInfoJSON = {'ERROR':"",'userVariables': "{}", 'time':0}
+        returnInfoJSON = {'ERROR':"",'userVariables': "{}", 'execTime':0, 'totalPyTime':0}
+        start = time()
 
         try:
             returnInfoJSON = exec_input(data['evalCode'], data['savedCode'])
@@ -190,6 +191,8 @@ if __name__ == '__main__':
             errorMsg = traceback.format_exc()
             errorMsg = errorMsg.replace("\n", "\\n")
             returnInfoJSON['ERROR'] = "Sorry, AREPL has ran into an error\\n\\n" + errorMsg
+
+        returnInfoJSON['totalPyTime'] = time() - start
 
         # 6q3co7 signifies to frontend that stdout is not due to a print in user's code
         print('6q3co7' + json.dumps(returnInfoJSON))

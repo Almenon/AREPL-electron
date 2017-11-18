@@ -13,7 +13,8 @@ module.exports.evalHandler =  class{
 	}
 
 	handleResult(pythonResults){
-		console.log(pythonResults.time)
+		console.log(pythonResults.execTime)
+		console.log(pythonResults.totalPyTime)
 		console.log(pythonResults.totalTime)
 
 		if(pythonResults.ERROR != ""){

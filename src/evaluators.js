@@ -126,7 +126,8 @@ module.exports.PythonEvaluator = class{
 		let pyResult = {
 			"ERROR":"",
 			"userVariables": "",
-			"time":0
+			"execTime":0,
+			"totalPyTime":0
 		}
 
         //result should have identifier, otherwise it is just a printout from users code
@@ -135,7 +136,8 @@ module.exports.PythonEvaluator = class{
             results = results.replace(identifier,"")
 			pyResult = JSON.parse(results)
 			
-			pyResult.time = pyResult.time*1000 // convert into ms
+			pyResult.execTime = pyResult.execTime*1000 // convert into ms
+			pyResult.totalPyTime = pyResult.totalPyTime*1000
 			
 			if(pyResult.userVariables != "") pyResult.userVariables = JSON.parse(pyResult.userVariables)
 
