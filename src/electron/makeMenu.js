@@ -29,6 +29,11 @@ FEATURES:
 * hover over vars to see their value
 * view to the right displays local variables only (so variables inside functions are not displayed)
 
+⚠ PRE-ALPHA FEATURES: ⚠
+* These may not work correctly.  Please report any bugs you find *
+Control-Enter: prints result of current line, or attributes of variable if the current line ends with a '.'.  
+#$save: saves state so everything before the line only gets run once, instead of every time you type
+
 QUESTIONS?:
 * email me at almenon214@gmail.com
     `});
