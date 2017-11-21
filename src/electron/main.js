@@ -63,7 +63,7 @@ function createWindow () {
 
   let indexPath = "/view/index.html"
   let fullIndexPath = process.cwd()
-  if(fullIndexPath.endsWith("arepl-win32")){ //production build
+  if(fullIndexPath.endsWith("arepl-win32-x64")){ //production build
     fullIndexPath = fullIndexPath + '/resources/app' + indexPath
   }
   else if(__dirname.includes("arepl-darwin")){ //mac prod build

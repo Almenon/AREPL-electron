@@ -19,13 +19,11 @@ html(lang='en')
     include main
   script.
     let rendererPath = process.cwd();
-    if(rendererPath.endsWith("arepl-win32")){ //win prod build
+    if(rendererPath.endsWith("arepl-win32-x64")){ //win prod build
       rendererPath = rendererPath + '/resources/app';
     }
     else if(__dirname.includes("arepl-darwin")){ //mac prod build
-      rendererPath = __dirname.replace("view",'/src/electron/renderer.js')
+      rendererPath = __dirname.replace("view",'')
     }
-    else{
-      rendererPath = rendererPath + '/src/electron/renderer.js';
-    }
-    require(rendererPath);
+    
+    require(rendererPath + '/src/electron/renderer.js');
