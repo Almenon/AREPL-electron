@@ -5,18 +5,25 @@ var evals = require("./evaluators")
 var cmUtils = require("./cmUtils")
 var evalHandler = require("./pythonResultHandler")
 var printDir = require("./printDir")
+var settings = require("./settings").settings
 
 var cm //codemirror
 var stopAtLine = -1
 var realTimeEvalEnabled = true
 var PythonEvaluator = new evals.PythonEvaluator()
 var myEvalHandler = new evalHandler.evalHandler()
-let restart = false
 
 // why the heck does javascript have "this" be so mutable? increadibly annoying...
 // binding this to the class so it doesn't get overwritten by PythonEvaluator
 PythonEvaluator.onPrint = myEvalHandler.handlePrint.bind(myEvalHandler)
 PythonEvaluator.onResult = myEvalHandler.handleResult.bind(myEvalHandler)
+
+let extraKeys = {}
+extraKeys[settings.printDir] = ()=>{
+	let codeLines = printDir.printDir(cm.getValue(), cm.getCursor().line)
+	evalCode(codeLines)
+}
+ 
 
 ///////////////////////////////////////////////////////////////
 //				CODEMIRROR SETUP AND INPUT HANDLERS			
@@ -27,16 +34,11 @@ $(function(){ //reference html elements after page load
 		mode: "python",
 		lineNumbers: true,
 		gutters: ["CodeMirror-linenumbers", "breakpoints"],
-		keyMap: "sublime",
+		keyMap: settings.keyMap,
 		matchBrackets: true,
-		extraKeys: {
-			"Ctrl-Enter": ()=>{
-				let codeLines = printDir.printDir(cm.getValue(), cm.getCursor().line)
-				evalCode(codeLines)
-			}
-		}
+		extraKeys: extraKeys
 	})
-	cm.on("changes",()=>{utils.delay(handleInput, 300)}) //delay 300ms to wait for user to finish typing
+	cm.on("changes",()=>{utils.delay(handleInput, settings.delay)}) 
 	cm.on('gutterClick', handleGutterClick)
 	
 	$(".CodeMirror").mousemove(handleMouseMove)
@@ -45,22 +47,33 @@ $(function(){ //reference html elements after page load
 	$('.CodeMirror').resizable({
 		handles: 'e,s,se', // right, bottom, and bottom-right corner
 		resize: function(event, ui) {
-			let errorPadding = parseInt($('#error').css('padding'))*2
-
-			cm.setSize(ui.size.width, ui.size.height);
-			$('#stdin').width(ui.size.width);
-			$('#error').width(ui.size.width-errorPadding);
-			$('#stdout').width(ui.size.width);
-			$('#leftContainer').width(ui.size.width);
+			changeEditorSize(ui.size.width, ui.size.height)
 		  },
 	});
+
+	changeEditorSize(settings.editorWidth, settings.editorHeight)
 })
 
-var shortcuts = {
-	"F1": restartExec,
-	"F4": toggleRealTimeEval,
-	"F5": runOnce
+/**
+ * changes the size of the editor, input, output, and error as a group
+ * @param {number} w in pixels
+ * @param {number} h in pixels
+ */
+function changeEditorSize(w,h){
+	let errorPadding = parseInt($('#error').css('padding'))*2
+	
+	cm.setSize(w, h);
+	$('#stdin').width(w);
+	$('#error').width(w-errorPadding);
+	$('#stdout').width(w);
+	$('#leftContainer').width(w);
 }
+
+var shortcuts = {}
+
+shortcuts[settings.restartExec] = restartExec
+shortcuts[settings.runOnce] = runOnce
+shortcuts[settings.toggleRealTimeEval] = toggleRealTimeEval
 
 window.onkeydown = (e) => {
 	let functionToRun = shortcuts[e.key];
@@ -181,7 +194,7 @@ function evalCode(codeLines){
 	$(".spinner").css("visibility","visible")
 	$("#stdout").text("")
 
-	if(restart) PythonEvaluator.restart(PythonEvaluator.execCode.bind(PythonEvaluator, data))
+	if(settings.restart) PythonEvaluator.restart(PythonEvaluator.execCode.bind(PythonEvaluator, data))
 	else PythonEvaluator.execCode(data)
 }
 

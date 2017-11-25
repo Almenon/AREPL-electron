@@ -1,8 +1,9 @@
 /*global $, renderjson*/ //comment for eslint
+let settings = require('./settings').settings
 
 const jsonRenderer = renderjson.set_icons('+', '-') // default icons look a bit wierd, overriding
-.set_show_to_level(2) // 2 shows x=1 and x=[1,2], provides option to expand deeply nested data like x=[[1]]
-.set_max_string_length(70); // 70 fits in 1280 screen
+.set_show_to_level(settings.show_to_level) 
+.set_max_string_length(settings.max_string_length);
 
 // just wrapping code in class so scope with printResult is preserved
 module.exports.evalHandler =  class{
