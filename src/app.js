@@ -11,6 +11,7 @@ var stopAtLine = -1
 var realTimeEvalEnabled = true
 var PythonEvaluator = new evals.PythonEvaluator()
 var myEvalHandler = new evalHandler.evalHandler()
+let restart = false
 
 // why the heck does javascript have "this" be so mutable? increadibly annoying...
 // binding this to the class so it doesn't get overwritten by PythonEvaluator
@@ -179,7 +180,9 @@ function evalCode(codeLines){
 	
 	$(".spinner").css("visibility","visible")
 	$("#stdout").text("")
-	PythonEvaluator.execCode(data)
+
+	if(restart) PythonEvaluator.restart(PythonEvaluator.execCode.bind(PythonEvaluator, data))
+	else PythonEvaluator.execCode(data)
 }
 
 /**

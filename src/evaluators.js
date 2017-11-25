@@ -19,6 +19,7 @@ module.exports.PythonEvaluator = class{
 	 * starts pythonEvaluator.py
 	 */
 	constructor(){
+		this.evaling = false
 		this.running = false
 		this.PythonShell = require('python-shell')
 
@@ -46,8 +47,8 @@ module.exports.PythonEvaluator = class{
 	 * @param {{evalCode:string}} code 
 	 */
 	execCode(code){
-		if(this.running) return
-		this.running = true
+		if(this.evaling) return
+		this.evaling = true
 		this.startTime = Date.now()
 		this.pyshell.send(JSON.stringify(code))
 	}
@@ -60,9 +61,10 @@ module.exports.PythonEvaluator = class{
 	}
 
 	/**
-	 * kills python process and restarts.  Force-kills if necessary.
+	 * kills python process and restarts.  Force-kills if necessary after 50ms.
+	 * After process restarts the callback passed in is invoked
 	 */
-	restart(){
+	restart(callback=()=>{}){
 		
 		var restarting = false
 
@@ -71,23 +73,24 @@ module.exports.PythonEvaluator = class{
 		// (pyshell callback only happens when process exits voluntarily)
 		this.pyshell.childProcess.on('exit',()=>{
 			restarting = true
-			this.running = false
+			this.evaling = false
 			this.startPython()
+			callback()
 		})
 
 		// pyshell has 50 ms to die gracefully
-		var dead = this.pyshell.childProcess.kill()
-		if(!dead) console.info("pyshell refused to die")
-		else this.running = false
+		this.running = !this.pyshell.childProcess.kill()
+		if(this.running) console.info("pyshell refused to die")
+		else this.evaling = false
 
 		setTimeout(()=>{
-			if(!dead && !restarting){
+			if(this.running && !restarting){
 				// murder the process with extreme prejudice
-				dead = this.pyshell.childProcess.kill('SIGKILL')
-				if(!dead){
+				this.running = !this.pyshell.childProcess.kill('SIGKILL')
+				if(this.running){
 					console.error("the python process simply cannot be killed!")
 				}
-				else this.running = false
+				else this.evaling = false
 			}
 		}, 50)
 	}
@@ -102,6 +105,7 @@ module.exports.PythonEvaluator = class{
 			console.info(message)
 			this.handleResult(message)
 		})
+		this.running = true
 	}
 
 	/**
@@ -132,7 +136,7 @@ module.exports.PythonEvaluator = class{
 
         //result should have identifier, otherwise it is just a printout from users code
         if(results.startsWith(identifier)){
-			this.running = false
+			this.evaling = false
             results = results.replace(identifier,"")
 			pyResult = JSON.parse(results)
 			
