@@ -366,6 +366,33 @@ noMatch = pattern.search('a')
 groups = search.groupdict()
 span = search.span()
 
+
+################################################
+#   TURTLE
+################################################
+
+import turtle 
+import random
+
+painter = turtle.Turtle()
+
+painter.speed(0)
+
+def circleThingy(num,dis):
+  for i in range(num):
+      painter.forward(dis)
+      painter.left(dis+50)
+    
+painter.pencolor("red")
+circleThingy(20,50)
+painter.pencolor("blue")
+circleThingy(20,500)   
+  
+  
+turtle.done()
+
+
+
 ################################################
 #   unsupported code (causes jsonpickle to fail)
 ################################################
