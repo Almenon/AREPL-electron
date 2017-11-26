@@ -7,6 +7,20 @@ from math import isnan
 import ast
 from time import time
 
+class execArgs(object):
+    def __init__(self, savedCode, evalCode, *args, **kwargs):
+        self.savedCode = savedCode
+        self.evalCode = evalCode
+        #self.action = action
+
+class returnInfoJson(object):
+    def __init__(self, ERROR, userVariables, execTime, totalTime, *args, **kwargs):
+        self.ERROR = ERROR
+        self.userVariables = userVariables
+        self.execTime = execTime
+        self.totalTime = totalTime
+
+
 class customPickler(jsonpickle.pickler.Pickler):
     """
     encodes float values like inf / nan as strings to follow JSON spec while keeping meaning
@@ -136,15 +150,9 @@ def copy_saved_imports_to_exec(codeToExec, savedLines):
 
 def exec_input(codeToExec, savedLines=""):
     """
-    returns the jsonpickled local variables and any errors
-    :returns: {userVariables: '', ERROR: ''}
+    returns info about the executed code (local vars, errors, and timing)
+    :rtype: returnInfoJson
     """
-    
-    returnInfo = {
-        'ERROR':"",
-        'userVariables':"",
-        'execTime':0
-    }
 
     evalLocals = get_eval_locals_from_saved(savedLines)
 
@@ -154,14 +162,14 @@ def exec_input(codeToExec, savedLines=""):
     try:
         start = time()
         exec(codeToExec, evalLocals)
-        returnInfo['execTime'] = time()-start
+        execTime = time()-start
     except Exception:
         errorMsg = traceback.format_exc()        
         raise UserError(errorMsg, evalLocals)
 
-    returnInfo['userVariables'] = pickle_user_vars(evalLocals)
+    userVariables = pickle_user_vars(evalLocals)
 
-    return returnInfo
+    return returnInfoJson("", userVariables, execTime, None)
 
 
 if __name__ == '__main__':
@@ -170,29 +178,30 @@ if __name__ == '__main__':
         
         try:
             data = json.loads(input())
+            data = execArgs(**data)
         except json.JSONDecodeError as e:
             # probably just due to user passing in stdin to program without input
             # in which case program completes and we get the stdin, which we ignore
             print('6q3co6' + str(e))
             continue
 
-        returnInfoJSON = {'ERROR':"",'userVariables': "{}", 'execTime':0, 'totalPyTime':0}
         start = time()
+        returnInfo = returnInfoJson("",{},None,None)
 
         try:
-            returnInfoJSON = exec_input(data['evalCode'], data['savedCode'])
+            returnInfo = exec_input(data.evalCode, data.savedCode)
         except (KeyboardInterrupt, SystemExit):
             raise
         except UserError as e:
             errorMsg = str(e).replace("\n", "\\n")
-            returnInfoJSON['ERROR'] = errorMsg
-            returnInfoJSON['userVariables'] = e.varsSoFar
+            returnInfo.ERROR = errorMsg
+            returnInfo.userVariables = e.varsSoFar
         except Exception:
             errorMsg = traceback.format_exc()
             errorMsg = errorMsg.replace("\n", "\\n")
-            returnInfoJSON['ERROR'] = "Sorry, AREPL has ran into an error\\n\\n" + errorMsg
+            returnInfo.ERROR = "Sorry, AREPL has ran into an error\\n\\n" + errorMsg
 
-        returnInfoJSON['totalPyTime'] = time() - start
+        returnInfo.totalPyTime = time() - start
 
         # 6q3co7 signifies to frontend that stdout is not due to a print in user's code
-        print('6q3co7' + json.dumps(returnInfoJSON))
+        print('6q3co7' + json.dumps(returnInfo, default=lambda x:x.__dict__))
