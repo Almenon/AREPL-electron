@@ -6,6 +6,7 @@ var cmUtils = require("./cmUtils")
 var evalHandler = require("./pythonResultHandler")
 var printDir = require("./printDir")
 var settings = require("./settings").settings
+const pyGuiLibraryIsPresent = require("./pyGuiLibraryIsPresent").pythonGuiLibraryIsPresent
 
 var cm //codemirror
 var stopAtLine = -1
@@ -42,7 +43,9 @@ $(function(){ //reference html elements after page load
 		extraKeys: extraKeys,
 		theme: settings.theme
 	})
-	cm.on("changes",()=>{utils.delay(handleInput, settings.delay)}) 
+	cm.on("changes",()=>{
+		let delay = settings.delay + settings.restartDelay*settings.restart //multiplying a number by a boolean... it feels so wrong yet so right
+		utils.delay(handleInput, delay)}) 
 	cm.on('gutterClick', handleGutterClick)
 	
 	$(".CodeMirror").mousemove(handleMouseMove)
@@ -197,6 +200,10 @@ function evalCode(codeLines){
 	
 	$(".spinner").css("visibility","visible")
 	$("#stdout").text("")
+
+	if(settings.autoChangeRestart){
+		settings.restart = pyGuiLibraryIsPresent(data.savedCode + data.evalCode)
+	}
 
 	if(settings.restart) PythonEvaluator.restart(PythonEvaluator.execCode.bind(PythonEvaluator, data))
 	else PythonEvaluator.execCode(data)

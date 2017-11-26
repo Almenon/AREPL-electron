@@ -28,11 +28,13 @@ FEATURES:
 * click on left bar to the right of line numbers to stop code evaluation at that line (sorta like a breakpoint)
 * hover over vars to see their value
 * view to the right displays local variables only (so variables inside functions are not displayed)
+* custom settings: edit src/settings.js and reload the app
 
 ⚠ PRE-ALPHA FEATURES: ⚠
 * These may not work correctly.  Please report any bugs you find *
 Control-Enter: prints result of current line, or attributes of variable if the current line ends with a '.'.  
 #$save: saves state so everything before the line only gets run once, instead of every time you type
+Auto-restart: if you import in a gui / plotting / graphing library the python evaluator restarts whenever you make a change
 
 QUESTIONS?:
 * email me at almenon214@gmail.com

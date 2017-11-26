@@ -3,6 +3,7 @@ module.exports.settings = {
     restartDelay: 300, // when restart mode is active we add this to delay to delay longer
     keyMap: "sublime", // could use vim or emacs instead
     restart: false,
+    autoChangeRestart: true, // automatically use restart mode if a GUI/graphing library detected
 
     // UI
     theme: "default", // suggested themes: 'eclipse', 'solarized_light', 'base16-light', etc... look at libraries/codemirror/theme for more
