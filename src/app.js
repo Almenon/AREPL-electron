@@ -25,10 +25,6 @@ extraKeys[settings.printDir] = ()=>{
 	evalCode(codeLines)
 }
 
-// increase delay w/ restart
-// (restart takes time so we want to eval code less frequently)
-if(settings.restart) settings.delay = settings.delay+settings.restartDelay 
-
 ///////////////////////////////////////////////////////////////
 //				CODEMIRROR SETUP AND INPUT HANDLERS			
 ////////////////////////////////////////////////////////////////
