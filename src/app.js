@@ -39,7 +39,8 @@ $(function(){ //reference html elements after page load
 		gutters: ["CodeMirror-linenumbers", "breakpoints"],
 		keyMap: settings.keyMap,
 		matchBrackets: true,
-		extraKeys: extraKeys
+		extraKeys: extraKeys,
+		theme: settings.theme
 	})
 	cm.on("changes",()=>{utils.delay(handleInput, settings.delay)}) 
 	cm.on('gutterClick', handleGutterClick)
