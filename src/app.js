@@ -23,7 +23,10 @@ extraKeys[settings.printDir] = ()=>{
 	let codeLines = printDir.printDir(cm.getValue(), cm.getCursor().line)
 	evalCode(codeLines)
 }
- 
+
+// increase delay w/ restart
+// (restart takes time so we want to eval code less frequently)
+if(settings.restart) settings.delay = settings.delay+settings.restartDelay 
 
 ///////////////////////////////////////////////////////////////
 //				CODEMIRROR SETUP AND INPUT HANDLERS			

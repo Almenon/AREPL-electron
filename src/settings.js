@@ -1,6 +1,7 @@
 module.exports.settings = {
     delay: 300, //delay before executing code after typing
-    keyMap: "sublime", // could use vim instead
+    restartDelay: 300, // when restart mode is active we add this to delay to delay longer
+    keyMap: "sublime", // could use vim or emacs instead
     editorHeight: 550, //editor includes input, output, and error width
     editorWidth: 500,
     restart: false,
