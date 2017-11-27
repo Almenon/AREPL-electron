@@ -24,11 +24,14 @@ module.exports.PythonEvaluator = class{
 		this.PythonShell = require('python-shell')
 
 		let rootPath = process.cwd()
-		if(rootPath.endsWith("arepl-win32-x64")){
+		if(rootPath.includes("arepl-win32")){
 		  rootPath = rootPath + '/resources/app'
 		}
 		else if(__dirname.includes("arepl-darwin")){ //mac prod build
-			rootPath = __dirname.replace("/view","")
+			rootPath = __dirname.replace("/src","")
+
+			//needed for Mac to prevent ENOENT
+			process.env.PATH = ["/usr/local/bin", process.env.PATH].join(":")
 		}
 
 		this.pythonEvalFolderPath = rootPath + '/src/python/'
