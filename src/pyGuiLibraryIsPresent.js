@@ -1,4 +1,4 @@
-let pyGuiLibraries = ["turtle", "matplotlib", "tkinter", "kivy", "pyforms", "PyQt4", "wx", "pyside", "plotly", "ggplot", "bokeh"]
+let pyGuiLibraries = ["turtle", "matplotlib", "tkinter", "kivy", "pyforms", "PyQt4", "PyQt5", "wx", "pyside", "plotly", "ggplot", "bokeh"]
 // of course there are tons more GUI and plotting libraries but that should cover most
 // edge case: pandas may or may not be used for graphing
 let pyGuiLibrariesImport = new RegExp("^import (" + pyGuiLibraries.join('|') + ')', 'im')
