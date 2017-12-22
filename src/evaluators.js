@@ -114,7 +114,7 @@ module.exports.PythonEvaluator = class{
 	/**
 	 * Overwrite this with your own handler.
 	 * is called when program fails or completes
-	 * @param {{ERROR:string, userVariables:Object}} foo
+	 * @param {{ERROR:string, userVariables:Object, execTime:number, totalPyTime:number, totalTime:number}} foo
 	 */
 	onResult(foo){}
 
@@ -165,6 +165,28 @@ module.exports.PythonEvaluator = class{
 			if(results.endsWith('\r')) results = results.slice(0, results.length-1);
             this.onPrint(results)
 		}
+	}
+
+	/**
+	 * checks syntax without executing code
+	 * @param {string} code
+	 * @returns {Promise}
+	 */
+	async checkSyntax(code){
+		// note that this should really be done in pythonEvaluator.py
+		// but communication with that happens through just one channel (stdin/stdout)
+		// so for now i prefer to keep this seperate
+
+		code = code.replace(/\n/g,"\\n") // command has to be executed on one line
+		let compileCommand = `${this.pythonPath} -c "compile('${code}','','exec')"`
+		let exec = require('child_process').exec
+
+		return new Promise((resolve, reject) => {
+			exec(compileCommand, (error, stdout, stderr) => {
+				if(error == null) resolve()
+				else reject(stderr)
+			})
+		})
 	}
 
 	/**

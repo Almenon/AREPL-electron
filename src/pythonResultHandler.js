@@ -13,18 +13,16 @@ module.exports.evalHandler =  class{
 		this.results = {};
 	}
 
+	/**
+	 * 
+	 * @param {{ERROR:string, userVariables:Object, execTime:number, totalPyTime: number, totalTime:number}} pythonResults 
+	 */
 	handleResult(pythonResults){
 		console.log(pythonResults.execTime)
 		console.log(pythonResults.totalPyTime)
 		console.log(pythonResults.totalTime)
 
-		if(pythonResults.ERROR != ""){
-			$("#error").text("⚠ " + pythonResults.ERROR);
-			$("#error").show("fast");
-		}
-		else{
-			$("#error").hide();
-		}
+		this.showErrorMsg(pythonResults.ERROR)
 			
 		if(pythonResults.userVariables != "" && pythonResults.userVariables != "{}"){
 			this.results = pythonResults.userVariables
@@ -32,6 +30,20 @@ module.exports.evalHandler =  class{
 		}
 		this.printResults = []; //clear so empty for next program run
 		$(".spinner").css("visibility","hidden");
+	}
+
+	/**
+	 * prints error or hides it if empty string
+	 * @param {string} error
+	 */
+	showErrorMsg(error){
+		if(error != ""){
+			$("#error").text("⚠ " + error);
+			$("#error").show("fast");
+		}
+		else{
+			$("#error").hide();
+		}
 	}
 
 	handlePrint(pythonResults){

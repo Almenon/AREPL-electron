@@ -11,8 +11,8 @@ const pyGuiLibraryIsPresent = require("./pyGuiLibraryIsPresent").pythonGuiLibrar
 var cm //codemirror
 var stopAtLine = -1
 var realTimeEvalEnabled = true
-var PythonEvaluator = new evals.PythonEvaluator()
-var myEvalHandler = new evalHandler.evalHandler()
+let PythonEvaluator = new evals.PythonEvaluator()
+let myEvalHandler = new evalHandler.evalHandler()
 
 // why the heck does javascript have "this" be so mutable? increadibly annoying...
 // binding this to the class so it doesn't get overwritten by PythonEvaluator
@@ -201,7 +201,15 @@ function evalCode(codeLines){
 		settings.restart = pyGuiLibraryIsPresent(data.savedCode + data.evalCode)
 	}
 
-	if(settings.restart) PythonEvaluator.restart(PythonEvaluator.execCode.bind(PythonEvaluator, data))
+	if(settings.restart){
+		PythonEvaluator.checkSyntax(data.savedCode + data.evalCode)
+		.then(()=>{
+			PythonEvaluator.restart(PythonEvaluator.execCode.bind(PythonEvaluator, data))
+		})
+		.catch((error)=>{
+			myEvalHandler.showErrorMsg(error)
+		})
+	}
 	else PythonEvaluator.execCode(data)
 }
 
