@@ -45,5 +45,9 @@ suite("printDir", () => {
         assert.equal(result[0], "foo")
         assert.equal(result[1], "print(dir(foo))")
     })
+    
+    test("appveyor should fail", () => {
+        assert.equal(1+1,3)
+    })
 
 })
