@@ -11,7 +11,7 @@
     "releaseBuildMac": "electron-packager . --overwrite --platform=darwin --ignore personal",
     "releaseBuildLinux": "electron-packager . --overwrite --platform=linux --ignore personal",
     "test": "mocha --ui tdd src/*.test.js",
-    "appveyorTest": "mocha --ui tdd --reporter mocha-appveyor-reporter src/*.test.js & exit 0"
+    "appveyorTest": "mocha --ui tdd --reporter mocha-appveyor-reporter src/*.test.js"
   },
   "repository": "https://github.com/Almenon/AREPL",
   "keywords": [
