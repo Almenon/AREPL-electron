@@ -1,7 +1,7 @@
 /*global $, CodeMirror, renderjson*/ //comment for eslint
 
 var utils = require("./utils")
-var evals = require("./evaluators")
+var evals = require("arepl-backend")
 var cmUtils = require("./cmUtils")
 var evalHandler = require("./pythonResultHandler")
 var printDir = require("./printDir")
