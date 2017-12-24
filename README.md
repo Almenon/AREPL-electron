@@ -1,4 +1,4 @@
-# AREPL: a real-time python scratchpad [![Build Status](https://travis-ci.org/Almenon/AREPL.svg?branch=master)](https://travis-ci.org/Almenon/AREPL) ![JS Tests](https://ci.appveyor.com/api/projects/status/a0ee1c2y5k40a0aw?svg=true)
+# AREPL: a real-time python scratchpad ![JS Tests](https://ci.appveyor.com/api/projects/status/a0ee1c2y5k40a0aw?svg=true)
 
 [install here](https://github.com/Almenon/AREPL/releases) | see it in action below:
 
