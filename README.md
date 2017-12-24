@@ -20,3 +20,5 @@
 5. npm start
 
 The app should now be up and running.
+
+see [AREPL-backend](https://github.com/Almenon/AREPL-backend) for the npm package that executes the python code
