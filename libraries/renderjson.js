@@ -1,4 +1,4 @@
-// Copyright © 2013-2014 David Caldwell <david@porkrind.org>
+// Copyright © 2013-2017 David Caldwell <david@porkrind.org>
 //
 // Permission to use, copy, modify, and/or distribute this software for any
 // purpose with or without fee is hereby granted, provided that the above
@@ -36,6 +36,12 @@
 // renderjson.set_sort_objects(sort_bool)
 //   Sort objects by key (default: false)
 //
+// renderjson.set_replacer(replacer_function)
+//   Equivalent of JSON.stringify() `replacer` argument when it's a function
+//
+// renderjson.set_property_list(property_list)
+//   Equivalent of JSON.stringify() `replacer` argument when it's an array
+//
 // Theming
 // -------
 // The HTML output uses a number of classes so that you can theme it the way
@@ -50,8 +56,7 @@
 //     .object.syntax ("{", "}")
 //     .array.syntax  ("[", "]")
 
-var module;
-(module||{}).exports = renderjson = (function() {
+var module, window, define, renderjson=(function() {
     var themetext = function(/* [class, text]+ */) {
         var spans = [];
         while (arguments.length)
@@ -72,8 +77,9 @@ var module;
         el.insertBefore(child, el.firstChild);
         return el;
     }
-    var isempty = function(obj) { for (var k in obj) if (obj.hasOwnProperty(k)) return false;
-                                  return true; }
+    var isempty = function(obj, pl) { var keys = pl || Object.keys(obj);
+                                      for (var i in keys) if (Object.hasOwnProperty.call(obj, keys[i])) return false;
+                                      return true; }
     var text = function(txt) { return document.createTextNode(txt) };
     var div = function() { return document.createElement("div") };
     var span = function(classname) { var s = document.createElement("span");
@@ -83,10 +89,10 @@ var module;
                                                    if (classname) a.className = classname;
                                                    a.appendChild(text(txt));
                                                    a.href = '#';
-                                                   a.onclick = function() { callback(); return false; };
+                                                   a.onclick = function(e) { callback(); if (e) e.stopPropagation(); return false; };
                                                    return a; };
 
-    function _renderjson(json, indent, dont_indent, show_level, max_string, sort_objects) {
+    function _renderjson(json, indent, dont_indent, show_level, options) {
         var my_indent = dont_indent ? "" : indent;
 
         var disclosure = function(open, placeholder, close, type, builder) {
@@ -94,13 +100,13 @@ var module;
             var empty = span(type);
             var show = function() { if (!content) append(empty.parentNode,
                                                          content = prepend(builder(),
-                                                                           A(renderjson.hide, "disclosure",
+                                                                           A(options.hide, "disclosure",
                                                                              function() { content.style.display="none";
                                                                                           empty.style.display="inline"; } )));
                                     content.style.display="inline";
                                     empty.style.display="none"; };
             append(empty,
-                   A(renderjson.show, "disclosure", show),
+                   A(options.show, "disclosure", show),
                    themetext(type+ " syntax", open),
                    A(placeholder, null, show),
                    themetext(type+ " syntax", close));
@@ -114,12 +120,12 @@ var module;
         if (json === null) return themetext(null, my_indent, "keyword", "null");
         if (json === void 0) return themetext(null, my_indent, "keyword", "undefined");
 
-        if (typeof(json) == "string" && json.length > max_string)
-            return disclosure('"', json.substr(0,max_string)+" ...", '"', "string", function () {
+        if (typeof(json) == "string" && json.length > options.max_string_length)
+            return disclosure('"', json.substr(0,options.max_string_length)+" ...", '"', "string", function () {
                 return append(span("string"), themetext(null, my_indent, "string", JSON.stringify(json)));
             });
 
-        if (typeof(json) != "object") // Strings, numbers and bools
+        if (typeof(json) != "object" || [Number, String, Boolean, Date].indexOf(json.constructor) >= 0) // Strings, numbers and bools
             return themetext(null, my_indent, typeof(json), JSON.stringify(json));
 
         if (json.constructor == Array) {
@@ -129,7 +135,7 @@ var module;
                 var as = append(span("array"), themetext("array syntax", "[", null, "\n"));
                 for (var i=0; i<json.length; i++)
                     append(as,
-                           _renderjson(json[i], indent+"    ", false, show_level-1, max_string, sort_objects),
+                           _renderjson(options.replacer.call(json, i, json[i]), indent+"    ", false, show_level-1, options),
                            i != json.length-1 ? themetext("syntax", ",") : [],
                            text("\n"));
                 append(as, themetext(null, indent, "array syntax", "]"));
@@ -138,19 +144,20 @@ var module;
         }
 
         // object
-        if (isempty(json))
+        if (isempty(json, options.property_list))
             return themetext(null, my_indent, "object syntax", "{}");
 
         return disclosure("{", "...", "}", "object", function () {
             var os = append(span("object"), themetext("object syntax", "{", null, "\n"));
             for (var k in json) var last = k;
-            var keys = Object.keys(json);
-            if (sort_objects)
+            var keys = options.property_list || Object.keys(json);
+            if (options.sort_objects)
                 keys = keys.sort();
             for (var i in keys) {
                 var k = keys[i];
+                if (!(k in json)) continue;
                 append(os, themetext(null, indent+"    ", "key", '"'+k+'"', "object syntax", ': '),
-                       _renderjson(json[k], indent+"    ", true, show_level-1, max_string, sort_objects),
+                       _renderjson(options.replacer.call(json, k, json[k]), indent+"    ", true, show_level-1, options),
                        k != last ? themetext("syntax", ",") : [],
                        text("\n"));
             }
@@ -161,29 +168,41 @@ var module;
 
     var renderjson = function renderjson(json)
     {
-        var pre = append(document.createElement("pre"), _renderjson(json, "", false, renderjson.show_to_level, renderjson.max_string_length, renderjson.sort_objects));
+        var options = Object.assign({}, renderjson.options);
+        options.replacer = typeof(options.replacer) == "function" ? options.replacer : function(k,v) { return v; };
+        var pre = append(document.createElement("pre"), _renderjson(json, "", false, options.show_to_level, options));
         pre.className = "renderjson";
         return pre;
     }
-    renderjson.set_icons = function(show, hide) { renderjson.show = show;
-                                                  renderjson.hide = hide;
+    renderjson.set_icons = function(show, hide) { renderjson.options.show = show;
+                                                  renderjson.options.hide = hide;
                                                   return renderjson; };
-    renderjson.set_show_to_level = function(level) { renderjson.show_to_level = typeof level == "string" &&
-                                                                                level.toLowerCase() === "all" ? Number.MAX_VALUE
-                                                                                                              : level;
+    renderjson.set_show_to_level = function(level) { renderjson.options.show_to_level = typeof level == "string" &&
+                                                                                        level.toLowerCase() === "all" ? Number.MAX_VALUE
+                                                                                                                      : level;
                                                      return renderjson; };
-    renderjson.set_max_string_length = function(length) { renderjson.max_string_length = typeof length == "string" &&
-                                                                                         length.toLowerCase() === "none" ? Number.MAX_VALUE
-                                                                                                                         : length;
+    renderjson.set_max_string_length = function(length) { renderjson.options.max_string_length = typeof length == "string" &&
+                                                                                                 length.toLowerCase() === "none" ? Number.MAX_VALUE
+                                                                                                                                 : length;
                                                           return renderjson; };
-    renderjson.set_sort_objects = function(sort_bool) { renderjson.sort_objects = sort_bool;
+    renderjson.set_sort_objects = function(sort_bool) { renderjson.options.sort_objects = sort_bool;
                                                         return renderjson; };
+    renderjson.set_replacer = function(replacer) { renderjson.options.replacer = replacer;
+                                                   return renderjson; };
+    renderjson.set_property_list = function(prop_list) { renderjson.options.property_list = prop_list;
+                                                         return renderjson; };
     // Backwards compatiblity. Use set_show_to_level() for new code.
-    renderjson.set_show_by_default = function(show) { renderjson.show_to_level = show ? Number.MAX_VALUE : 0;
+    renderjson.set_show_by_default = function(show) { renderjson.options.show_to_level = show ? Number.MAX_VALUE : 0;
                                                       return renderjson; };
+    renderjson.options = {};
     renderjson.set_icons('⊕', '⊖');
     renderjson.set_show_by_default(false);
     renderjson.set_sort_objects(false);
     renderjson.set_max_string_length("none");
+    renderjson.set_replacer(void 0);
+    renderjson.set_property_list(void 0);
     return renderjson;
 })();
+
+if (define) define({renderjson:renderjson})
+else (module||{}).exports = (window||{}).renderjson = renderjson;
