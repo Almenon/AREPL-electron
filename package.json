@@ -24,20 +24,20 @@
   "author": "Almenon",
   "devDependencies": {
     "@types/codemirror": "0.0.41",
-    "@types/jquery": "^3.2.15",
-    "@types/mocha": "^2.2.44",
-    "concurrently": "^3.5.0",
+    "@types/jquery": "^3.3.0",
+    "@types/mocha": "^2.2.46",
+    "concurrently": "^3.5.1",
     "devtron": "^1.4.0",
     "mocha": "^3.5.3",
     "mocha-appveyor-reporter": "^0.4.0",
     "pug-cli": "^1.0.0-alpha6"
   },
   "dependencies": {
-    "arepl-backend": "^1.0.0-alpha.4",
+    "arepl-backend": "^1.0.0-alpha.5",
     "electron": "^1.8.1",
     "electron-context-menu": "^0.9.1",
-    "electron-updater": "^2.15.1",
-    "jquery": "^3.2.1",
+    "electron-updater": "^2.20.0",
+    "jquery": "^3.3.1",
     "python-shell": "^0.4.0"
   }
 }

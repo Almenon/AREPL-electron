@@ -19,6 +19,8 @@ let myEvalHandler = new evalHandler.evalHandler()
 PythonEvaluator.onPrint = myEvalHandler.handlePrint.bind(myEvalHandler)
 PythonEvaluator.onResult = myEvalHandler.handleResult.bind(myEvalHandler)
 
+PythonEvaluator.startPython()
+
 let extraKeys = {}
 extraKeys[settings.printDir] = ()=>{
 	let codeLines = printDir.printDir(cm.getValue(), cm.getCursor().line)
