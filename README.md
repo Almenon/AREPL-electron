@@ -1,6 +1,6 @@
 # AREPL: a real-time python scratchpad [![Build status](https://ci.appveyor.com/api/projects/status/a0ee1c2y5k40a0aw?svg=true)](https://ci.appveyor.com/project/Almenon/arepl-vscode)
 
-[install here](https://github.com/Almenon/AREPL/releases) | or install as [VSCode extension](https://github.com/Almenon/AREPL/releases) | see it in action below:
+[install here](https://github.com/Almenon/AREPL/releases) | or install as [VSCode extension](https://github.com/Almenon/AREPL-AREPL-vscode) | see it in action below:
 
 ![Alt Text](https://raw.githubusercontent.com/Almenon/AREPL/master/arepl%20demo.gif)
 
