@@ -153,7 +153,7 @@ function handleGutterClick(cm, lineNum) {
 	else{
 		cm.setGutterMarker(lineNum, "breakpoints", utils.makeMarker())
 		cm.addLineClass(lineNum,"background","noEvalFirst")
-		for(i=lineNum; i<cm.lineCount(); i++){
+		for(let i=lineNum; i<cm.lineCount(); i++){
 			cm.addLineClass(i,"background","noEval")
 		}
 		stopAtLine = lineNum
