@@ -1,16 +1,16 @@
 /*global $, CodeMirror, renderjson*/ //comment for eslint
 
-var utils = require("./utils")
-var evals = require("arepl-backend")
-var cmUtils = require("./cmUtils")
-var evalHandler = require("./pythonResultHandler")
-var printDir = require("./printDir")
-var settings = require("./settings").settings
+let utils = require("./utils")
+let evals = require("arepl-backend")
+let cmUtils = require("./cmUtils")
+let evalHandler = require("./pythonResultHandler")
+let printDir = require("./printDir")
+let settings = require("./settings").settings
 const pyGuiLibraryIsPresent = require("./pyGuiLibraryIsPresent").pythonGuiLibraryIsPresent
 
-var cm //codemirror
-var stopAtLine = -1
-var realTimeEvalEnabled = true
+let cm //codemirror
+let stopAtLine = -1
+let realTimeEvalEnabled = true
 let PythonEvaluator = new evals.PythonEvaluator()
 let myEvalHandler = new evalHandler.evalHandler()
 
@@ -74,7 +74,7 @@ function changeEditorSize(w,h){
 	$('#leftContainer').width(w);
 }
 
-var shortcuts = {}
+let shortcuts = {}
 
 shortcuts[settings.restartExec] = restartExec
 shortcuts[settings.runOnce] = runOnce
@@ -114,7 +114,7 @@ function handleSTDIN(){
 	if(!PythonEvaluator.running){
 		evalCode(cm.getValue())
 	}
-	var text = $("#stdin").val()
+	let text = $("#stdin").val()
 	$("#stdin").val("")
 	PythonEvaluator.sendStdin(text)
 }
@@ -123,10 +123,10 @@ function handleSTDIN(){
  * displays variable's value if hovering over variable
  */
 function handleMouseMove(event){
-	var variable = cmUtils.getVariable(cm, event)
+	let variable = cmUtils.getVariable(cm, event)
 	if(variable == undefined) return
 
-	var result = myEvalHandler.results[variable]
+	let result = myEvalHandler.results[variable]
 	if(result == undefined) console.debug("no token found in results. Token: " + variable + " Results: " + myEvalHandler.results)
 
 	cmUtils.changePopups(event, result)
@@ -141,7 +141,7 @@ function handleGutterClick(cm, lineNum) {
 	if(stopAtLine != -1){
 	  cm.setGutterMarker(stopAtLine, "breakpoints",null)
 	  cm.removeLineClass(stopAtLine,"background","noEvalFirst")
-	  for(var i=stopAtLine; i<cm.lineCount(); i++){
+	  for(let i=stopAtLine; i<cm.lineCount(); i++){
 		  cm.removeLineClass(i,"background","noEval")
 	  }
 	}
@@ -220,7 +220,7 @@ function evalCode(codeLines){
  * @param {string[]} codeLines 
  */
 function getCodeUntillBreakpoint(codeLines){
-	var lineStop = stopAtLine+1 //switch to one-based indexing
+	let lineStop = stopAtLine+1 //switch to one-based indexing
 	if(lineStop > codeLines.length){
 		lineStop = stopAtLine = -1 //user got rid of new line, so get rid of unnecessary break
 		console.debug("stop at line " + lineStop + " the number of lines: " + codeLines.length)
