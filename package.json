@@ -33,7 +33,7 @@
     "pug-cli": "^1.0.0-alpha6"
   },
   "dependencies": {
-    "arepl-backend": "^1.0.0-beta.1",
+    "arepl-backend": "^1.0.0-beta.2",
     "electron": "1.8.2-beta.4",
     "electron-context-menu": "^0.9.1",
     "electron-updater": "^2.21.8",
