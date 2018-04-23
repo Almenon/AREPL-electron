@@ -6,10 +6,10 @@ let cmUtils = require("./cmUtils")
 let evalHandler = require("./pythonResultHandler")
 let printDir = require("./printDir")
 let settings = require("./settings").settings
+let breakpoint = require("./breakpoint")
 const pyGuiLibraryIsPresent = require("./pyGuiLibraryIsPresent").pythonGuiLibraryIsPresent
 
 let cm //codemirror
-let stopAtLine = -1
 let realTimeEvalEnabled = true
 let PythonEvaluator = new evals.PythonEvaluator()
 let myEvalHandler = new evalHandler.evalHandler()
@@ -44,7 +44,11 @@ $(function(){ //reference html elements after page load
 	cm.on("changes",()=>{
 		let delay = settings.delay + settings.restartDelay*settings.restart //multiplying a number by a boolean... it feels so wrong yet so right
 		utils.delay(handleInput, delay)}) 
-	cm.on('gutterClick', handleGutterClick)
+	cm.on('gutterClick', (cm, lineNum)=>{
+			breakpoint.colorLinesAfterBreakpoint(cm, lineNum)
+			handleInput() //re-run w/ breakpoint
+		}
+	)
 	
 	$(".CodeMirror").mousemove(handleMouseMove)
 	$("#stdin").keyup((e) => {if(e.key == "Enter") handleSTDIN()})
@@ -132,36 +136,6 @@ function handleMouseMove(event){
 	cmUtils.changePopups(event, result)
 }
 
-/**
- * sets a breakpoint
- */
-function handleGutterClick(cm, lineNum) {
-	
-	// if there is break clear all UI related to it (break, firstline, color)
-	if(stopAtLine != -1){
-	  cm.setGutterMarker(stopAtLine, "breakpoints",null)
-	  cm.removeLineClass(stopAtLine,"background","noEvalFirst")
-	  for(let i=stopAtLine; i<cm.lineCount(); i++){
-		  cm.removeLineClass(i,"background","noEval")
-	  }
-	}
-
-	// if user removes break, set stopAtLine to no stop indicator
-	if(lineNum == stopAtLine) stopAtLine = -1
-	
-	// else add break & firstline & color & lineNum
-	else{
-		cm.setGutterMarker(lineNum, "breakpoints", utils.makeMarker())
-		cm.addLineClass(lineNum,"background","noEvalFirst")
-		for(let i=lineNum; i<cm.lineCount(); i++){
-			cm.addLineClass(i,"background","noEval")
-		}
-		stopAtLine = lineNum
-	}
-
-	//refresh results
-	handleInput()
-}
 
 /**
  * @param {string} codeLines 
@@ -172,8 +146,9 @@ function evalCode(codeLines){
 
 	if( codeLines.length == 0 || codeLines.length == 1 && codeLines[0].trim().length == 0) return
 
-	if(stopAtLine > -1){
-		codeLines = getCodeUntillBreakpoint(codeLines)
+	if(breakpoint.breakPointActive()){
+		codeLines = breakpoint.getCodeUntillBreakpoint(codeLines)
+		breakpoint.recolorLinesAfterBreakpoint(cm, codeLines)
 	}
 
 	if(codeLines.length == 0){
@@ -213,23 +188,4 @@ function evalCode(codeLines){
 		})
 	}
 	else PythonEvaluator.execCode(data)
-}
-
-/**
- * has side-effect of updating breakpoint if line deleted
- * @param {string[]} codeLines 
- */
-function getCodeUntillBreakpoint(codeLines){
-	let lineStop = stopAtLine+1 //switch to one-based indexing
-	if(lineStop > codeLines.length){
-		lineStop = stopAtLine = -1 //user got rid of new line, so get rid of unnecessary break
-		console.debug("stop at line " + lineStop + " the number of lines: " + codeLines.length)
-	}
-	else if(lineStop > 0){
-		codeLines = codeLines.slice(0,lineStop-1)
-		if(codeLines[codeLines.length-1] == ""){ //newline
-			cm.addLineClass(lineStop,"background","noEval")
-		}
-	}
-	return codeLines
 }
