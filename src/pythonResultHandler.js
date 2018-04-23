@@ -3,14 +3,14 @@ let settings = require('./settings').settings
 
 const jsonRenderer = renderjson.set_icons('+', '-') // default icons look a bit wierd, overriding
 .set_show_to_level(settings.show_to_level) 
-.set_max_string_length(settings.max_string_length);
+.set_max_string_length(settings.max_string_length)
 
 // just wrapping code in class so scope with printResult is preserved
 module.exports.evalHandler =  class{
 
 	constructor(){
-		this.printResults = [];
-		this.results = {};
+		this.printResults = []
+		this.results = {}
 	}
 
 	/**
@@ -28,8 +28,8 @@ module.exports.evalHandler =  class{
 			this.results = pythonResults.userVariables
 			$("#results").html(jsonRenderer(this.results))
 		}
-		this.printResults = []; //clear so empty for next program run
-		$(".spinner").css("visibility","hidden");
+		this.printResults = [] //clear so empty for next program run
+		$(".spinner").css("visibility","hidden")
 	}
 
 	/**
@@ -38,17 +38,17 @@ module.exports.evalHandler =  class{
 	 */
 	showErrorMsg(error){
 		if(error != ""){
-			$("#error").text("⚠ " + error);
-			$("#error").show("fast");
+			$("#error").text("⚠ " + error)
+			$("#error").show("fast")
 		}
 		else{
-			$("#error").hide();
+			$("#error").hide()
 		}
 	}
 
 	handlePrint(pythonResults){
-		this.printResults.push(pythonResults);
-		$("#stdout").text(this.printResults.join('\n'));
+		this.printResults.push(pythonResults)
+		$("#stdout").text(this.printResults.join('\n'))
 	}
 
 }

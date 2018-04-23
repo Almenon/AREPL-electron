@@ -10,7 +10,7 @@ function printDir(codeLines, currentLineNum){
 	// todo: flash a highlight for line that is printed
 	// https://codemirror.net/demo/markselection.html
 	// tho might be simpler to implement myself
-	// codeMirrorEditor.setLineClass(actualLineNumber, 'background', 'printed');
+	// codeMirrorEditor.setLineClass(actualLineNumber, 'background', 'printed')
 	codeLines = codeLines.split('\n')
 
 	let currentLine = codeLines[currentLineNum]

@@ -17,7 +17,7 @@ require('electron-context-menu')({
         // Only show it when right-clicking images 
         visible: params.mediaType === 'image'
     }]
-});
+})
 
 function isDevMode(){
   const getFromEnv = parseInt(process.env.ELECTRON_IS_DEV, 10) === 1;
@@ -31,8 +31,8 @@ function isDevMode(){
  */
 function registerAutoUpdateHandlers(){
   autoUpdater.on('checking-for-update', () => {
-    console.log('Checking for update...');
-  });
+    console.log('Checking for update...')
+  })
   autoUpdater.on('update-available', (info) => {
     const updateAvailibleMenu = {
       label: "New update availible",
@@ -41,15 +41,15 @@ function registerAutoUpdateHandlers(){
         click: () => { require('electron').shell.openExternal('https://github.com/Almenon/AREPL/releases') }
       }]
     }
-    menuTemplate.push(updateAvailibleMenu);
-    Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate));
-  });
+    menuTemplate.push(updateAvailibleMenu)
+    Menu.setApplicationMenu(Menu.buildFromTemplate(menuTemplate))
+  })
   autoUpdater.on('update-not-available', (info) => {
-    console.log('Update not available.');
-  });
+    console.log('Update not available.')
+  })
   autoUpdater.on('error', (err) => {
-    console.error(err);
-  });
+    console.error(err)
+  })
 }
 
 function createWindow () {
@@ -79,17 +79,17 @@ function createWindow () {
     pathname: fullIndexPath,
     protocol: 'file:',
     slashes: true
-  }));
+  }))
 
-  menuTemplate = makeMenu.makeMenu(mainWindow);
+  menuTemplate = makeMenu.makeMenu(mainWindow)
 
-  registerAutoUpdateHandlers();
-  autoUpdater.autoDownload = false;
-  autoUpdater.checkForUpdates();
+  registerAutoUpdateHandlers()
+  autoUpdater.autoDownload = false
+  autoUpdater.checkForUpdates()
 
   if(isDevMode()){
-    mainWindow.webContents.openDevTools();
-    require('devtron').install();
+    mainWindow.webContents.openDevTools()
+    require('devtron').install()
   }
 
   // Emitted when the window is closed.
@@ -98,7 +98,7 @@ function createWindow () {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     mainWindow = null
-  });
+  })
 }
 
 // This method will be called when Electron has finished

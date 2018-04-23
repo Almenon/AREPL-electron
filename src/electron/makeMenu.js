@@ -14,7 +14,7 @@ const helpSubmenu = [
       label: 'Search or report a issue',
       click () { require('electron').shell.openExternal('https://github.com/Almenon/AREPL/issues') }
     }
-  ];
+  ]
 
 function documentation(){
   dialog.showMessageBox({detail: `SHORTCUTS:
@@ -38,8 +38,8 @@ Auto-restart: if you import in a gui / plotting / graphing library the python ev
 
 QUESTIONS?:
 * email me at almenon214@gmail.com
-    `});
-};
+    `})
+}
 
 const fileMenu = {
   label: 'File',
@@ -54,27 +54,27 @@ const fileMenu = {
  * @returns {object[]} menu template
  */
 module.exports.makeMenu = function(mainWindow){
-  var template = defaultMenu();
-  var helpMenuIndex = 3;
-  var fileMenuIndex = 0;
+  var template = defaultMenu()
+  var helpMenuIndex = 3
+  var fileMenuIndex = 0
   if(process.platform == "darwin"){
-    helpMenuIndex++;
-    fileMenuIndex++;
+    helpMenuIndex++
+    fileMenuIndex++
   }
 
   // Help menu modfications
-  template[helpMenuIndex].submenu = helpSubmenu;
+  template[helpMenuIndex].submenu = helpSubmenu
 
   // File menu modificatoins
   template.splice(fileMenuIndex,0,fileMenu)
   template[fileMenuIndex].submenu[0].click = () => {
-    mainWindow.webContents.send('openFileMenuClick', null);
+    mainWindow.webContents.send('openFileMenuClick', null)
   }
   template[fileMenuIndex].submenu[1].click = () => {
-    mainWindow.webContents.send('saveFileMenuClick', null);
+    mainWindow.webContents.send('saveFileMenuClick', null)
   }
 
-  const menu = Menu.buildFromTemplate(template);
-  Menu.setApplicationMenu(menu);
-  return template;
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
+  return template
 }

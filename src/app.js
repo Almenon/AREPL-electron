@@ -54,7 +54,7 @@ $(function(){ //reference html elements after page load
 		resize: function(event, ui) {
 			changeEditorSize(ui.size.width, ui.size.height)
 		  },
-	});
+	})
 
 	changeEditorSize(settings.editorWidth, settings.editorHeight)
 })
@@ -67,11 +67,11 @@ $(function(){ //reference html elements after page load
 function changeEditorSize(w,h){
 	let errorPadding = parseInt($('#error').css('padding'))*2
 	
-	cm.setSize(w, h);
-	$('#stdin').width(w);
-	$('#error').width(w-errorPadding);
-	$('#stdout').width(w);
-	$('#leftContainer').width(w);
+	cm.setSize(w, h)
+	$('#stdin').width(w)
+	$('#error').width(w-errorPadding)
+	$('#stdout').width(w)
+	$('#leftContainer').width(w)
 }
 
 let shortcuts = {}
@@ -81,8 +81,8 @@ shortcuts[settings.runOnce] = runOnce
 shortcuts[settings.toggleRealTimeEval] = toggleRealTimeEval
 
 window.onkeydown = (e) => {
-	let functionToRun = shortcuts[e.key];
-	if(functionToRun != undefined) functionToRun();
+	let functionToRun = shortcuts[e.key]
+	if(functionToRun != undefined) functionToRun()
 }
 module.exports.insertStringIntoEditor = function(content){
 	cm.setValue(content)
@@ -168,7 +168,7 @@ function handleGutterClick(cm, lineNum) {
  */
 function evalCode(codeLines){
 	codeLines = codeLines.split('\n')
-	let savedLines = [];
+	let savedLines = []
 
 	if( codeLines.length == 0 || codeLines.length == 1 && codeLines[0].trim().length == 0) return
 
@@ -189,7 +189,7 @@ function evalCode(codeLines){
 			savedLines = codeLines.slice(0,i+1)
 			codeLines = codeLines.slice(i+1,codeLines.length)
 		}
-	});
+	})
 
 	let data = {
 		savedCode: savedLines.join('\n'),

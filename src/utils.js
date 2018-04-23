@@ -14,22 +14,22 @@ module.exports.noChange = function(oldText, text){
  * taken from https://codemirror.net/demo/marker.html
  */
 module.exports.makeMarker = function() {
-  var marker = document.createElement("div");
-  marker.style.color = "#822";
-  marker.innerHTML = "●";
-  return marker;
+  var marker = document.createElement("div")
+  marker.style.color = "#822"
+  marker.innerHTML = "●"
+  return marker
 }
 
 /**
  * thanks to https://stackoverflow.com/a/1909508/6629672
  */
 module.exports.delay = (function(){
-  var timer = 0;
+  var timer = 0
   return function(callback, ms){
-    clearTimeout (timer);
-    timer = setTimeout(callback, ms);
-  };
-})();
+    clearTimeout (timer)
+    timer = setTimeout(callback, ms)
+  }
+})()
 
 /**
  * line -> func(line)
