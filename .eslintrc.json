@@ -50,6 +50,7 @@
         "no-unexpected-multiline":"warn",
         "no-unsafe-finally":"warn",
         "no-unsafe-negation":"warn",
-        "semi": ["warn","never"]
+        "semi": ["warn","never"],
+        "max-len": ["warn",100]
     }
 }

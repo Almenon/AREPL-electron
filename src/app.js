@@ -42,7 +42,7 @@ $(function(){ //reference html elements after page load
 		theme: settings.theme
 	})
 	cm.on("changes",()=>{
-		let delay = settings.delay + settings.restartDelay*settings.restart //multiplying a number by a boolean... it feels so wrong yet so right
+		let delay = settings.delay + settings.restartDelay*settings.restart
 		utils.delay(handleInput, delay)}) 
 	cm.on('gutterClick', (cm, lineNum)=>{
 			breakpoint.colorLinesAfterBreakpoint(cm, lineNum)
@@ -131,7 +131,10 @@ function handleMouseMove(event){
 	if(variable == undefined) return
 
 	let result = myEvalHandler.results[variable]
-	if(result == undefined) console.debug("no token found in results. Token: " + variable + " Results: " + myEvalHandler.results)
+	if(result == undefined){
+		console.debug("no token found in results. Token: " + variable +
+					  " Results: " + myEvalHandler.results)
+	}
 
 	cmUtils.changePopups(event, result)
 }

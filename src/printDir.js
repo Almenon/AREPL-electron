@@ -41,7 +41,9 @@ function printDir(codeLines, currentLineNum){
 
 	// put new code on next line (if we are printing "x=1" we want print(x) on next line)
 	codeLines.splice(currentLineNum+1,0,newLine)
-	codeLines[currentLineNum] = currentLine // we might need to remove . from currentLine so update that too
+	// we might need to remove . from currentLine so update that too
+	codeLines[currentLineNum] = currentLine
+	
 	return codeLines.join('\n')
 }
 
