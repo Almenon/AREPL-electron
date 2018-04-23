@@ -83,7 +83,7 @@ function adaptTemplateForMac(template){
         {role: 'front'}
     ]
 
-    return template;
+    return template
 }
 
 /**
@@ -95,7 +95,7 @@ module.exports = function(){
     if (process.platform === 'darwin'){
         return adaptTemplateForMac(template);
     }
-    return template;
+    return template
 }
 
 
