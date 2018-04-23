@@ -2,14 +2,18 @@
 
 let utils = require("./utils")
 let evals = require("arepl-backend")
-let cmUtils = require("./cmUtils")
+let {CodeMirrorUtils} = require("./cmUtils")
 let evalHandler = require("./pythonResultHandler")
 let printDir = require("./printDir")
 let settings = require("./settings").settings
 let breakpoint = require("./breakpoint")
 const pyGuiLibraryIsPresent = require("./pyGuiLibraryIsPresent").pythonGuiLibraryIsPresent
 
-let cm //codemirror
+/**@type {CodeMirror.EditorFromTextArea}*/
+let cm
+/**@type {CodeMirrorUtils}*/
+let cmUtils
+
 let realTimeEvalEnabled = true
 let PythonEvaluator = new evals.PythonEvaluator()
 let myEvalHandler = new evalHandler.evalHandler()
@@ -41,6 +45,8 @@ $(function(){ //reference html elements after page load
 		extraKeys: extraKeys,
 		theme: settings.theme
 	})
+	cmUtils = new CodeMirrorUtils(cm)
+
 	cm.on("changes",()=>{
 		let delay = settings.delay + settings.restartDelay*settings.restart
 		utils.delay(handleInput, delay)}) 
@@ -127,7 +133,7 @@ function handleSTDIN(){
  * displays variable's value if hovering over variable
  */
 function handleMouseMove(event){
-	let variable = cmUtils.getVariable(cm, event)
+	let variable = cmUtils.getVariable(event)
 	if(variable == undefined) return
 
 	let result = myEvalHandler.results[variable]
