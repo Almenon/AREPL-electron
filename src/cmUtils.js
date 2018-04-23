@@ -27,25 +27,4 @@ module.exports.CodeMirrorUtils = class CodeMirrorUtils{
 			}
 		}
 	}
-
-	/**
-	 * returns cm contents with current line replaced by newLine.  actual contents remains unchanged.
-	 * @param {string} newLine 
-	 * @returns {string}
-	 */
-	replaceCurrentLine(newLine){
-		let codeLines = this.cm.getValue().split('\n')
-		let currentLine = this.cm.getCursor().line
-		codeLines[currentLine] = newLine
-		return codeLines.join('\n')	
-	}
-
-	/**
-	 * @returns {string}
-	 */
-	getCurrentLine(){
-		let codeLines = this.cm.getValue().split('\n')
-		let currentLine = this.cm.getCursor().line
-		return codeLines[currentLine]	
-	}
 }
