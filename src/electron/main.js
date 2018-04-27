@@ -5,6 +5,9 @@ const path = require('path')
 const url = require('url')
 const makeMenu = require('./makeMenu')
 
+const {tmpdir} = require('os')
+const {writeFileSync} = require('fs')
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow
@@ -48,6 +51,7 @@ function registerAutoUpdateHandlers(){
     console.log('Update not available.')
   })
   autoUpdater.on('error', (err) => {
+    writeFileSync(path.join(tmpdir(), "areplLog\\error.txt"), err)
     console.error(err)
   })
 }
@@ -86,7 +90,7 @@ function createWindow () {
   registerAutoUpdateHandlers()
   autoUpdater.autoDownload = false
   autoUpdater.checkForUpdates()
-
+  
   if(isDevMode()){
     mainWindow.webContents.openDevTools()
     require('devtron').install()
