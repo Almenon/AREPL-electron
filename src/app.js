@@ -14,6 +14,7 @@ let cm
 /**@type {CodeMirrorUtils}*/
 let cmUtils
 
+let justOpenedFile = false
 let realTimeEvalEnabled = true
 let PythonEvaluator = new evals.PythonEvaluator()
 let myEvalHandler = new evalHandler.evalHandler()
@@ -95,6 +96,7 @@ window.onkeydown = (e) => {
 	if(functionToRun != undefined) functionToRun()
 }
 module.exports.insertStringIntoEditor = function(content){
+	justOpenedFile = true
 	cm.setValue(content)
 }
 module.exports.getEditorContents = function(){
@@ -113,6 +115,13 @@ function restartExec(){
  */
 function handleInput(){
 	if(!realTimeEvalEnabled) return
+
+	// don't want to execute unknown python file - only if user modifies it
+	if(justOpenedFile){
+		justOpenedFile = false
+		return
+	}
+
 	evalCode(cm.getValue())
 }
 
