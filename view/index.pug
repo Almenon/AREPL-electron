@@ -19,10 +19,10 @@ html(lang='en')
     include main
   script.
     let rendererPath = process.cwd();
-    if(rendererPath.endsWith("arepl-win32-x64")){ //win prod build
+    if(rendererPath.endsWith("arepl-win32-x64")){
       rendererPath = rendererPath + '/resources/app';
     }
-    else if(__dirname.includes("arepl-darwin")){ //mac prod build
+    else if(__dirname.includes("arepl-darwin") || rendererPath.endsWith("arepl-linux-x64")){ //mac prod build
       rendererPath = __dirname.replace("view",'')
     }
     
