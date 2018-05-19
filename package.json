@@ -28,16 +28,16 @@
     "@types/mocha": "^2.2.48",
     "concurrently": "^3.5.1",
     "devtron": "^1.4.0",
+    "electron-packager": "^12.1.0",
     "mocha": "^3.5.3",
     "mocha-appveyor-reporter": "^0.4.0",
-    "pug-cli": "^1.0.0-alpha6",
-    "electron-packager": "^12.0.2"
+    "pug-cli": "^1.0.0-alpha6"
   },
   "dependencies": {
     "arepl-backend": "^1.0.0-beta.2",
     "electron": "1.8.6",
     "electron-context-menu": "^0.9.1",
-    "electron-updater": "^2.21.8",
+    "electron-updater": "^2.21.10",
     "jquery": "^3.3.1",
     "python-shell": "^0.4.0"
   }
