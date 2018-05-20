@@ -106,6 +106,7 @@ module.exports.getEditorContents = function(){
 function toggleRealTimeEval(){realTimeEvalEnabled = !realTimeEvalEnabled}
 
 function restartExec(){
+	myEvalHandler.clearPrint()
 	PythonEvaluator.restart()
 	$(".spinner").css("visibility","hidden")
 }

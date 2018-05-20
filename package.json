@@ -38,6 +38,7 @@
     "electron": "1.8.6",
     "electron-context-menu": "^0.9.1",
     "electron-updater": "^2.21.10",
+    "function-throttler": "^1.0.0",
     "jquery": "^3.3.1",
     "python-shell": "^0.4.0"
   }

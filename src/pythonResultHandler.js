@@ -1,5 +1,6 @@
 /*global $, renderjson*/ //comment for eslint
 let settings = require('./settings').settings
+let {limit} = require('function-throttler')
 
 const jsonRenderer = renderjson.set_icons('+', '-') // default icons look a bit wierd, overriding
 .set_show_to_level(settings.show_to_level) 
@@ -11,6 +12,10 @@ module.exports.evalHandler =  class{
 	constructor(){
 		this.printResults = []
 		this.results = {}
+
+		// a program can print millions of lines so we need to throttle it to avoid lag
+		let l = new limit()
+		this.updatePrint = l.throttledUpdate(this.updatePrint, 50)
 	}
 
 	/**
@@ -46,9 +51,25 @@ module.exports.evalHandler =  class{
 		}
 	}
 
+	/**
+	 * @param {string} pythonResults 
+	 */
 	handlePrint(pythonResults){
 		this.printResults.push(pythonResults)
-		$("#stdout").text(this.printResults.join('\n'))
+		this.updatePrint(this.printResults)
+	}
+	
+	/**
+	 * @private
+	 * @param {string[]} text 
+	 */
+	updatePrint(printLines){
+		$("#stdout").text(printLines.join('\n'))
+	}
+
+	clearPrint(){
+		this.printResults = []
+		this.updatePrint([""])
 	}
 
 }
