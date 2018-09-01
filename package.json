@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "arepl-backend": "^1.0.0-beta.2",
-    "electron": "1.8.6",
+    "electron": "1.8.8",
     "electron-context-menu": "^0.9.1",
     "electron-updater": "^2.21.10",
     "function-throttler": "^1.0.0",
