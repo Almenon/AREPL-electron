@@ -12,7 +12,7 @@
 * Sublime key-bindings
 * Batch Editing (via control)
 
-Note: This verison of AREPL is a bit out of date.  For the latest features I highly reccomend installing [vscode](https://code.visualstudio.com/) and getting the [VSCode extension](https://github.com/Almenon/AREPL-vscode)
+Note: This verison of AREPL is out of date and no longer maintained.  For the latest features I highly reccomend installing [vscode](https://code.visualstudio.com/) and getting the [VSCode extension](https://github.com/Almenon/AREPL-vscode)
 
 #### Deveveloper Setup:
 
