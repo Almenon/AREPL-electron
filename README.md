@@ -1,4 +1,6 @@
-# AREPL: a real-time python scratchpad [![Build status](https://ci.appveyor.com/api/projects/status/a0ee1c2y5k40a0aw?svg=true)](https://ci.appveyor.com/project/Almenon/arepl)
+# No longer maintained - please install [vscode](https://code.visualstudio.com/) and use the [VSCode extension](https://github.com/Almenon/AREPL-vscode)
+
+## AREPL: a real-time python scratchpad [![Build status](https://ci.appveyor.com/api/projects/status/a0ee1c2y5k40a0aw?svg=true)](https://ci.appveyor.com/project/Almenon/arepl)
 
 [install here](https://github.com/Almenon/AREPL/releases) | or install as [VSCode extension](https://github.com/Almenon/AREPL-vscode) | see it in action below:
 
@@ -11,8 +13,6 @@
 * Breakpoints
 * Sublime key-bindings
 * Batch Editing (via control)
-
-**Note: This verison of AREPL is out of date and no longer maintained.**  For the latest features I highly reccomend installing [vscode](https://code.visualstudio.com/) and getting the [VSCode extension](https://github.com/Almenon/AREPL-vscode)
 
 #### Deveveloper Setup:
 
